@@ -1,0 +1,17 @@
+# Glossary: no-lead-left-behind
+
+A public showcase of one AI-agent deployment for a fictional residential developer in Kyiv.
+
+- **Client A**: the fictional client, a residential developer in Kyiv. Never a real company.
+- **Buyer**: a person who writes in Telegram or calls about buying a flat.
+- **Manager**: the client's human sales person, who takes over from the agent.
+- **Lead**: a record in the CRM for one buyer, with their contact and what they want.
+- **Agent**: the one Claude-based assistant that answers buyers in Telegram.
+- **Tool**: an action the agent can call: price lookup, create lead, hand off.
+- **Handoff**: the agent stops and passes the buyer to a manager.
+- **Qualification**: the questions that tell how serious a buyer is and what they need (budget, rooms, timing, payment method).
+- **After-call webhook**: the message the telephony system sends to us after each phone call ends.
+- **Personal data removal (redaction)**: replacing names, phone numbers and similar data with placeholders before text leaves our system.
+- **Test case**: one given / when / then scenario that defines good behaviour. There are 10; the eval runner runs them.
+- **Eval runner**: the script that runs the 10 test cases against the agent and reports pass/fail, quality and cost.
+- **Baseline**: how the client's process performs before the deployment, to compare the pilot against.
