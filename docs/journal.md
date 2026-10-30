@@ -70,3 +70,7 @@ No estimate in the plan for the critic; took about 0:15. Applied, all accepted b
 - README gets one line on how it was built, with a link to `docs/WORKFLOW.md`: the brief lists context engineering, and the founder sees only the README.
 - Core now ~4:50.
 - `/manager` keeps its name and gets a Ukrainian description in the command menu: a first-time buyer reads the description, not the name; `/call_human` would promise a phone call (Taras's call).
+- WORKFLOW.md names two loops: planning (stages 0-3, once per scope) and build (stages 4-5, all the time): Taras wants to know at a glance which stage comes next.
+- Code tickets start with `/mattpocock-skills:implement`: it drives `tdd`, which confirms what it tests with Taras first, and forbids redesign mid-build; ticket 2 has no code, so plain text.
+- Build critic runs after tickets 4, 7 and 8, not every 2-3: those change the project's shape.
+- The build critic also reads the journal since its last run: drift hides in small decisions, and they are written there.
