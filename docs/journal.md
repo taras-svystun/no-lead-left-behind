@@ -179,3 +179,9 @@ Estimate 0:15; took about 0:50 (a guess from session length), the extra being th
 - For T7: the agent quoted the right River studio price with North's area (28 m2, not 26). Price checks alone miss it; the eval should check every number in a reply against one price list row.
 - Reset for testing is a shell command, not a `/reset` in the bot: no code, and no buyer can ever delete a lead. Stop the bot, `rm -f crm.sqlite`, start it; chats live in memory, so the restart clears them too.
 - A buyer back after a closed handoff: P17 (Taras's call: polish).
+
+## 2026-10-30: Critic on the build (T3-T5)
+
+Took about 0:15. Taras rejected the time finding: the learning is worth more than the overrun, and 2-4 more hours are free.
+- GIF moved from T5's check to T8: T5 was ✅ with an open check, and a GIF of a raw flow would be redone anyway.
+- T5a added: the model gets the disclosure as a system note on the first turn, so it stops greeting twice (live, 1 of 3 first replies did).
