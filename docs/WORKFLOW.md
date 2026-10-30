@@ -25,9 +25,9 @@ Taras reviews after each stage before the next one starts.
 0. **Critic on the setup** (optional, before the grill): new session, paste the critic prompt.
 1. **Grill.** New session: `/mattpocock-skills:grill-with-docs`. Say: "Grill me on docs/PLAN.md, open questions first."
 2. **Spec + tickets.** Same session, after the grill: "Write delivery/spec.md and delivery/test-cases.md, then the core tickets in docs/PLAN.md, as WORKFLOW.md stage 2 says."
-3. **Critic on the plan.** New session, paste the critic prompt below.
+3. **Critic on the plan.** New session, paste the critic prompt below, then add: "Stage 3: critic on the plan. No code exists yet."
 4. **Implement.** New session: "Implement ticket N from docs/PLAN.md." Optionally `/mattpocock-skills:tdd`.
-5. **Critic on the build.** New session, paste the critic prompt below. Also run `/mattpocock-skills:code-review` against the last critic commit.
+5. **Critic on the build.** New session, paste the critic prompt below, then add: "Stage 5: critic on the build, tickets N-M, diff since <commit>." Also run `/mattpocock-skills:code-review` against the last critic commit.
 
 ## The critic prompt
 

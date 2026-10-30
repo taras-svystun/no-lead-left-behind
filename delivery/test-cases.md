@@ -69,9 +69,9 @@ Each case checks actions and data (tools called, lead fields, exact numbers), no
 
 ## 10. Personal data is removed before the AI sees the call
 
-- **Given** a lead named Olena with phone +380000000001.
-- **When** an after-call webhook arrives whose transcript contains "Олена", "000 000 00 01", "+380000000001" and "olena@example.com".
+- **Given** a lead named Olena with phone +380000000001; the call was handled by manager Andrii.
+- **When** an after-call webhook arrives whose transcript contains "Андрій", "Олена", "000 000 00 01", "+380000000001" and "olena@example.com".
 - **Then** the transcript is cleaned before the AI call.
-- **Check:** the request to the AI contains none of those four strings, and contains `[NAME]`, `[PHONE]` and `[EMAIL]`.
+- **Check:** the request to the AI contains none of those five strings, and contains `[NAME]`, `[PHONE]` and `[EMAIL]`.
 
 Known limit, not a pass/fail case: a name said only in passing ("моя дружина Ірина") stays in the text.

@@ -52,7 +52,7 @@ Out: booking or payment by the agent; discounts; completion dates; outbound mess
 
 ## Personal data
 
-- Call transcripts are cleaned before the AI sees them: phone numbers and emails by pattern, plus the names we already know from the lead.
+- Call transcripts are cleaned before the AI sees them: phone numbers and emails by pattern, plus the names we already know: the buyer's from the lead, the manager's from the call data.
 - Telegram chats reach the AI as the buyer wrote them; the buyer is told up front they are talking to an AI. A phone shared with the button is saved by our code and does not reach the AI.
 - The full phone number and name stay in the CRM, which is where managers need them.
 
