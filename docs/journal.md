@@ -31,3 +31,16 @@ No estimate in the plan. Findings and Taras's calls:
 - Taras's edit: critic prompt no longer weighs the time budget or says that zero findings is fine.
 - Critic prompt: "nothing game-changing" allowed again; Risk line cut (budget no longer weighed); Bloat merged into Simplify.
 - CLAUDE.md: every session ends with the next stage or ticket and its exact prompt from WORKFLOW.md.
+
+## 2026-10-30: Grill (stage 1)
+
+No estimate in the plan for the grill. Decisions are in `docs/PLAN.md`, "Grill decisions"; the key ones:
+
+- One lead per buyer, matched by phone: Ringostat sends no CRM lead id (help.ringostat.com, 2026-10-30).
+- The after-call webhook simulates Ringostat's "call processed by AI" event: only that event carries the transcript.
+- Redaction covers the call transcript only; Telegram chats reach Claude as written, said openly in the spec.
+- Haiku 5.5 first (~0.04 USD per eval run), Sonnet 5.5 if Haiku fails; one Sonnet comparison run for the README (platform.claude.com pricing, 2026-10-30).
+- AI disclosure always; `/manager` at any time; share-phone button offered twice at most, then refusal respected.
+- Rejected: n8n (one webhook does not need a platform); our own speech-to-text (Ringostat already transcribes).
+- Glossary opens with the whole story in 8 steps: Taras asked for one picture of the terms before building.
+- 10 test cases: 8 for the agent, 2 for the after-call webhook (lead match, redaction).
