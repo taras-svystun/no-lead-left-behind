@@ -3,6 +3,10 @@
 One AI-agent deployment, run end to end for a fictional client: a Kyiv residential developer whose buyers wait hours for an answer and whose CRM stays half empty.
 The client, its prices and its buyers are simulated; the Claude API calls, the code and the eval numbers are real.
 
+![A whole chat: qualification, price, phone, handoff](docs/demo.gif)
+
+A buyer qualifies in Telegram while the lead fills itself in the CRM; frame by frame in [Demo](#demo).
+
 ## What's here
 
 The first written work of an AI deployment, done for Client A:
@@ -50,8 +54,6 @@ What Claude receives from the [sample call](tests/fixtures/call-1001.vtt), outpu
 The buyer's name is caught in its Ukrainian forms ("Олена", "Олено"), and a phone in any of its formats.
 
 ## Demo
-
-![A whole chat: qualification, price, phone, handoff](docs/demo.gif)
 
 Left: the buyer's Telegram, with the live bot. Right: the lead in the CRM (SQLite), refreshed every second. The GIF plays at 1.5x; here is the [full-quality MP4](docs/demo.mp4).
 The phone number is blurred in the chat only because this repo is public.

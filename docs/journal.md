@@ -290,10 +290,16 @@ Findings: no CRM pane for the GIF's frame 2; the take-home rehearsal buried; two
 - README "After a call" shows three transcript lines before and after `app/redact.py`, copied from its real output on the fixture.
 - CRM pane for the GIF: explained in chat, no file changed.
 
-## 2026-10-30: demo GIF and MP4 (T8, about 0:40 against T8's 0:45 total)
+## 2026-10-30: demo GIF and MP4 (T8: 0:40 here, 1:05 in total against 0:45)
 
 - Taras recorded `DEMO.mp4` (48 s, 1080p, 16 MB); it stays out of git because it shows his real phone.
 - Phone blurred in the Telegram contact card: OpenCV template match on the name and number, multi-scale for the recorder's zoom, on every frame from 35 s; 319 of 319 frames from 36.27 s to 46.88 s matched above 0.6. Then a fixed bottom-left blur for 46.8-47.25 s, where the card leaves the screen half-cut and matching fails; checked frame by frame that the number is off-screen after 47.3 s. The script ran from the scratchpad, not the repo: a one-off edit, not part of the system.
 - `docs/demo.gif`: 1.5x, 10 fps, 960 px, 128 colours, 5.0 MB; 960 px, not 800, so the CRM pane stays readable. GitHub autoplays a GIF; a committed MP4 does not play inline.
 - `docs/demo.mp4`: same video at 1x, CRF 28, silent track dropped (it was -91 dB), 1.7 MB.
 - README frame notes rewritten to match the recording: the planned script ("Скільки коштує двокімнатна в North?", "в суботу") is not what Taras typed, and notes must describe what the reader sees.
+
+## 2026-10-30: critic on T8 (stage 5)
+
+Privacy checked on frames of both files: the CRM pane shows the phone masked, the contact card is blurred, no unblurred video in git history.
+- README: the GIF moved under the two-line intro, so the founder sees the agent work in the first screen; frame notes stay in "Demo".
+- T8 marked ✅ (Taras approved); its journal time corrected to 1:05 against 0:45. Core is done: next, apply.
