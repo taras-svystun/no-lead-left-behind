@@ -28,11 +28,23 @@ Out: booking or payment by the agent; discounts; completion dates; outbound mess
 
 ## How it works
 
-**Telegram chat.** The agent says first that it is an AI assistant and never poses as a human. It answers in the buyer's language, from the price list and the policies only. It asks for budget, rooms, timing, payment method and phone. For the phone it offers a "Share phone" button; if the buyer ignores it, it offers once more at handoff; after a refusal it never asks again. Every chat creates a lead with its first message, so a buyer who stops after two messages is still a lead; the agent adds what it learns as it goes.
+**Telegram chat.** The agent says first that it is an AI assistant and never poses as a human. It answers in the buyer's language, from the price list and the policies only. It asks for budget, rooms, timing, payment method and phone. For the phone it shows a "Share phone" button twice at most: with its first reply and with the handoff message. The button disappears once the phone is shared, and the agent never insists. Every chat creates a lead with its first message, so a buyer who stops after two messages is still a lead; the agent adds what it learns as it goes.
 
 **Handoff.** The agent passes the buyer to a manager when the buyer asks for a person or sends `/manager` (any time), wants a viewing or a booking, asks what the price list and policies do not answer, or complains. The lead gets status `handoff` and the reason; the buyer is told a manager will write within 15 minutes. After that the agent only repeats that a manager is on it.
 
-**After a phone call.** The telephony system sends the call's transcript and the caller's phone. We find the lead by phone, or create one. We remove names, phone numbers and emails from the transcript, then the AI writes a short summary and fills budget, rooms, timing and payment method on the lead.
+**After a phone call.** The telephony system sends the caller's phone and a link to the call's transcript. We skip a call we have already processed, because the telephony system resends a webhook it thinks was lost. We find the lead by phone, or create one. We remove names, phone numbers and emails from the transcript, then the AI writes a short summary and fills budget, rooms, timing and payment method on the lead.
+
+## Call webhook fields
+
+The "call processed by AI" event, from the telephony system's parameter sheet. Keys marked simulated have no public example.
+
+| Payload field | Key | Used for |
+|---|---|---|
+| Call ID | `call_id` (simulated) | skip a repeated delivery |
+| Caller's number | `caller` | find the lead; stored as +380… whatever the format |
+| Employee | `employee_fio` | redaction only; not stored |
+| AI result file (.vtt) | `transcript_url` (simulated) | the transcript: time codes stripped, redacted, not stored |
+| Short summary | (simulated) | not used: it fills no lead field |
 
 ## Lead fields
 

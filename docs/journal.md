@@ -60,3 +60,12 @@ Estimate 1:20 for spec and test cases; took about 0:30 of writing after the gril
 - Ringostat call webhooks (after call, processed by AI) carry no caller name, only phone and employee name; client names come only in messenger events (help.ringostat.com parameter sheets EN/UK/RU, 2026-10-30; `docs/research/ringostat-webhook-name-fields.md`). So the simulated payload has no caller name and redaction takes names from the lead found by phone. No estimate in the plan; took about 5 minutes.
 - Redaction also removes the manager's name (`employee_fio`): it is personal data and appears in the transcript. Test case 10 checks it.
 - The critic is told its stage in one line: the prompt fits both reviews, and guessing the scope wastes its attention.
+
+## 2026-10-30: Critic on the plan (stage 3)
+
+No estimate in the plan for the critic; took about 0:15. Applied, all accepted by Taras:
+
+- Webhook is checked, not only processed (+0:20): skip repeated call IDs (Ringostat resends), phones normalised to E.164 (Telegram sends `380…`), transcript read from the `.vtt` link as the real event sends it, payload-to-lead field table in the spec. It is the take-home's "check a sample webhook".
+- Phone button shown by code twice at most (first reply, handoff), no refusal detection (-0:15): the model-side refusal rule had no test case.
+- README gets one line on how it was built, with a link to `docs/WORKFLOW.md`: the brief lists context engineering, and the founder sees only the README.
+- Core now ~4:50.

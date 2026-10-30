@@ -14,6 +14,7 @@ The whole flow as one story: `docs/STORY.md`.
 - **Simulated CRM**: the core's stand-in for the client's CRM, one SQLite table; Bitrix24 replaces it in polish.
 - **Agent**: the one Claude-based assistant that answers buyers in Telegram.
 - **Telegram ID**: the fixed number Telegram gives each account; how the agent recognises a buyer in chat.
+- **Call ID**: the telephony system's id for one call; a second webhook with the same id is a repeat and is skipped.
 - **Duplicate lead**: two leads for one buyer, made when a call's phone matches no existing lead.
 - **Tool**: an action the agent can call: save lead, hand off. Price lookup joins in polish.
 - **Price list**: Client A's flat types, prices and payment options; the agent quotes only from it.
