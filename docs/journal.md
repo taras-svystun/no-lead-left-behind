@@ -124,3 +124,22 @@ Estimate 0:15; took about 0:30 (a guess from session length), the extra being th
 - For T6: the call ID store is not in T3; T6 adds its own `processed_calls` table, not a column on leads.
 - For T5/T7: the end-to-end test CLAUDE.md asks for comes with the first full flow; T3 has unit tests only.
 - Not fixed: updating a lead id that does not exist does nothing silently; ids only come from `create_lead`.
+
+## 2026-10-30: T4 agent
+
+Estimate 0:40; took about 1:00 (a guess from session length), the extra being the two-axis review and its fixes.
+
+- `reply` returns `Reply(text, ask_phone)`, not `str`: the bot must know when to show "Share phone" (D10), and code decides it from the CRM (first reply, or the reply that hands off; never once a phone is on the lead).
+- Disclosure and fixed texts follow the buyer's first words: any Cyrillic letter -> Ukrainian, else English; a Ukrainian disclosure would fail case 8 (Taras's call).
+- A shared phone is saved by code; the AI gets only a note that it was shared, so it goes on asking (Taras's call).
+- When the model calls `hand_off`, the buyer gets only the fixed day/night text and no AI call follows: nothing invented, the chat never returns to the model (Taras's call).
+- Manual tool loop, not the SDK's tool runner: the handoff must stop the loop, and the runner is beta.
+- No `strict` on the tools: save_lead's fields are all optional; the CRM's CHECK rejects a bad value and the AI gets an error result.
+- Safe default: an empty reply, a refusal or 5 AI calls in one turn -> handoff `unknown`; a manager beats a guess or an endless bill.
+- Chats live in memory: a restart forgets the chat, the lead stays.
+- `/start` and `/manager@Bot` handled in code, no AI call (review).
+- Review: text written next to a save_lead call was lost, and an empty follow-up handed off by mistake; now every text of the turn reaches the buyer.
+- Review, prompt: completion dates named under "unknown" (case 5); "are you human?" is not a manager request (case 7); the agent asks once for the phone (spec).
+- Not fixed: the reason and payment values sit in three places (CRM CHECK, tool schema, prompt), one per reader; `_save_lead` catches `sqlite3.IntegrityError`, so P10 must map Bitrix24 errors there.
+- Not verified: the live case 1 test (`tests/test_agent_live.py`) is skipped without `ANTHROPIC_API_KEY`; nor whether Haiku 5.5 accepts `effort: low`. T4 stays ⏳ until it runs.
+- For T5: keep the "Share phone" keyboard on screen until the phone is shared, since the agent asks late; Telegram's `language_code` could pick the disclosure language after `/start`, which is Ukrainian today.
