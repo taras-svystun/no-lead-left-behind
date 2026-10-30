@@ -89,7 +89,9 @@ def process_call(db, client, payload):
 def _summarise(client, transcript):
     response = client.messages.create(
         model=MODEL,
-        max_tokens=1024,
+        # A ceiling, not a cost: thinking counts against it, and a cut reply could end inside a tool call.
+        # If evals ever show stop_reason "max_tokens", hand off instead of guessing.
+        max_tokens=8000,
         output_config={"effort": "low", "format": {"type": "json_schema", "schema": FIELDS_SCHEMA}},
         system=SYSTEM,
         messages=[{"role": "user", "content": transcript}],

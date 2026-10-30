@@ -224,3 +224,4 @@ Took about 0:20 against 0:10: two live checks and the code review.
 - Live, "Привіт, є студії?" 4 times: no crash; 1 handoff, now with reason `unknown`, still a wrong handoff (P18).
 - Kept the CRM's `ValueError` handling: strict checks types and enums, not meaning (a negative budget passes the schema).
 - Not checked: a reply cut at `max_tokens` could still end inside a tool call; unlikely at 2048 tokens.
+- `max_tokens` 2048 (agent) and 1024 (calls) -> 8000: Haiku thinks before answering and thinking counts against the ceiling; a ceiling costs nothing until used (worst case ~0.004 USD a call). A `stop_reason == "max_tokens"` check waits until evals show a cut reply (Taras's call).
