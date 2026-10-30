@@ -27,7 +27,7 @@ Three pains, three fixes: **slow answers** -> instant answers; **lost leads** ->
 
 | The role does | Proof in this project |
 |---|---|
-| Discovery: how the process really works | discovery notes |
+| Discovery: how the process really works | discovery findings at the top of the spec |
 | Personal data anonymised before it leaves the client | redaction of the call webhook |
 | Specs: scenarios, field mapping, integrations, where a person steps in | one-page spec |
 | Test cases that define "good" | 10 test cases, run by the eval runner |
@@ -51,15 +51,16 @@ The take-home task for this role is "a one-page spec, 10 test cases, check a sam
 - **Every component earns its place.** For each one: its single job, one sentence for a non-technical person, the alternative rejected, the price paid. If that can't be written, it goes. No vector DB, runtime multi-agent, framework, dashboard or Kubernetes unless a test case needs it.
 - **80/20.** The 20% of effort that gives 80% of the result. Cut scope gladly.
 - **Spec and test cases first, code second.** The 10 test cases are the contract.
-- **Taras understands and can explain every line.** Boring, readable Python beats clever.
+- **Taras understands and can explain the idea behind every line.** Boring, readable Python beats clever.
 - **Honest numbers.** Anything simulated says "simulated".
 - **Senior signal.** Trade-offs, risks and limits written down, not just code.
 - **Context engineering.** The build itself shows it: each working session gets a small, deliberate context from files, not from chat history (see `docs/WORKFLOW.md`).
 - **Tests.** Unit tests, plus at least one end-to-end test.
+- **Context economy.** Every text file is as short as it can be without losing meaning. Less text, cleaner context, better sessions.
 
 ## Hard constraints
 
-- **Time.** Core: 5-6 hours, 8 at most, then apply. Polish: after applying.
+- **Time.** Core: 2-4 hours, 6 at most, then apply. Polish: after applying, in the order of `docs/PLAN.md`.
 - **Money.** Free tiers, open source, local tools only. About 3 USD of Anthropic API credit in total. If something costs money: stop, name the free alternative and what it costs us.
 - **Public repo.** No real personal data, no secrets, no real company names, no mention of the employer.
 - **No live bot.** The Telegram demo is a screen recording (GIF) with a frame-by-frame explanation, not a bot that must stay online.

@@ -18,7 +18,7 @@ A public showcase of one AI-agent deployment for a fictional residential develop
 
 ## Build process
 
-- **Core**: the part built first (5-6 hours), enough to apply with.
+- **Core**: the part built first (2-4 hours), enough to apply with.
 - **Polish**: everything after applying.
 - **Delivery documents**: the client-facing documents in `delivery/`.
 - **Planner / implementer / critic**: the three session roles in `docs/WORKFLOW.md`. One AI, separate fresh sessions.

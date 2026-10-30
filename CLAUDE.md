@@ -5,7 +5,7 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 - `docs/BRIEF.md`: why the project exists, who reads it, what Taras cares about, hard constraints. Read it at the start of every session.
 - `docs/WORKFLOW.md`: the build stages and which session does what. Read it to know your role and which files to read and write.
 - `docs/PLAN.md`: scope (core / polish), open questions, tickets. Read it when starting a step.
-- `delivery/`: the client-facing documents (discovery, spec, test cases, ...). The spec and test cases are also the build spec.
+- `delivery/`: the client-facing documents (spec, test cases, ...). The spec and test cases are also the build spec.
 - `GLOSSARY.md`: the project's words. Use them in code, docs and commits. Matt Pocock skills that ask for `CONTEXT.md` use this file.
 - `docs/journal.md`: what each finished step did and why, and the critic's findings.
 - `docs/adr/`: decisions that are hard to undo. Read before changing the CRM contract, the personal data removal, or the eval judge.
@@ -13,6 +13,7 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 
 ## Rules of this project
 
+- Write tersely in every file: one sentence per fact, the deciding reason only. Journal: one line per decision ("Used SQLite, not Bitrix24: no server, stdlib").
 - The 10 test cases in `delivery/test-cases.md` are the contract. The eval runner runs the same 10 cases.
 - Every component earns its place (see the brief). Core first; anything not in the core waits for polish.
 - Boring, readable Python. Taras must be able to explain every line.

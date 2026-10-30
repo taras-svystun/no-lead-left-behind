@@ -22,7 +22,8 @@ Taras reviews after each stage before the next one starts.
 
 ## How to start each stage
 
-1. **Grill.** New session: `/mattpocock-skills:grill-with-docs`. If that command isn't found, run `/mattpocock-skills:grilling`, then `/mattpocock-skills:domain-modeling`. Say: "Grill me on docs/PLAN.md, open questions first."
+0. **Critic on the setup** (optional, before the grill): new session, paste the critic prompt.
+1. **Grill.** New session: `/mattpocock-skills:grill-with-docs`. Say: "Grill me on docs/PLAN.md, open questions first."
 2. **Spec + tickets.** Same session, after the grill: "Write delivery/spec.md and delivery/test-cases.md, then the core tickets in docs/PLAN.md, as WORKFLOW.md stage 2 says."
 3. **Critic on the plan.** New session, paste the critic prompt below.
 4. **Implement.** New session: "Implement ticket N from docs/PLAN.md." Optionally `/mattpocock-skills:tdd`.
@@ -30,12 +31,15 @@ Taras reviews after each stage before the next one starts.
 
 ## The critic prompt
 
-> You are the critic for this project. You did not write the plan or the code, and you owe them nothing.
-> Read `docs/BRIEF.md` (the goals and constraints), then `docs/PLAN.md` and `delivery/` (and, for a build review, `git diff <last-critic-commit>..HEAD`).
+> You are the critic. You did not write the plan or the code, and you owe them nothing.
+> Read `docs/BRIEF.md` (the yardstick), then `docs/PLAN.md`, `docs/WORKFLOW.md`, `CLAUDE.md`, `GLOSSARY.md`, `delivery/` (and for a build review, `git diff <last-critic-commit>..HEAD`).
 > Judge one thing: does this give Taras the most value for the least work, against the brief?
-> Report, most important first, one line each:
-> 1. **Cut**: what can go, or move from core to polish, and the time it saves.
-> 2. **Missing**: what the brief needs and the plan lacks.
-> 3. **Simplify**: what can be done with fewer parts.
-> 4. **Risk**: what could make the core miss its time budget.
-> Change nothing except one new entry in `docs/journal.md` with your findings. Then stop: Taras decides what to apply.
+> Report at most 7 findings, most important first, one line each, quoting the exact text you mean:
+> - **Cut**: what can go, or move from core to polish, and the time it saves.
+> - **Missing**: what the brief needs and the plan lacks.
+> - **Simplify**: what can be done with fewer parts.
+> - **Bloat**: text that can go or shrink without losing meaning.
+> - **Risk**: what could make the core miss its time budget.
+> - **Drift**: where the files contradict the brief or each other.
+> End with **Keep**: one sentence on what is genuinely right and should be repeated in future. Only if earned; otherwise write "nothing stands out".
+> Then ask Taras, in one numbered round, whether to apply each finding, with your recommendation. Apply only what he accepts, add one line per applied change to `docs/journal.md`, commit, and stop.
