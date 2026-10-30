@@ -225,3 +225,22 @@ Took about 0:20 against 0:10: two live checks and the code review.
 - Kept the CRM's `ValueError` handling: strict checks types and enums, not meaning (a negative budget passes the schema).
 - Not checked: a reply cut at `max_tokens` could still end inside a tool call; unlikely at 2048 tokens.
 - `max_tokens` 2048 (agent) and 1024 (calls) -> 8000: Haiku thinks before answering and thinking counts against the ceiling; a ceiling costs nothing until used (worst case ~0.004 USD a call). A `stop_reason == "max_tokens"` check waits until evals show a cut reply (Taras's call).
+
+## 2026-10-30: T7 eval runner
+
+Took about 0:50 against 0:40 (agent time): a failed case 2, its diagnosis, and the review fixes.
+- `evals/run.py` runs the 10 cases on the real API; `Recorder` wraps the client, keeps each request as text and adds up the cost from D2's prices.
+- Each case gets its own in-memory CRM, not one shared file: every case uses the same Telegram ID, and cases 2, 9 and 10 share +380000000001, so one file would let one case's lead break the next.
+- Cases 3 and 5 count the model's own `hand_off` calls, so the code's fallback handoff (also `unknown`) cannot pass case 5.
+- Checks tightened beyond `delivery/test-cases.md`: whole words for "AI"/"бот" ("бот" sits inside "робота"); totals also read as "85 тисяч", "85k", "85.000"; no-break spaces count as spaces.
+- Added the row check asked for after T5: an area or price per m2 must come from the row of a total the reply quotes (cases 1, 6, 8). A reply with no total is not checked.
+- A response with `stop_reason == "max_tokens"` fails its case (the T5b note); none did.
+- First Haiku run 9/10: case 2 lost `rooms`. Cause, measured on its first message: `strict` with optional fields made Haiku invent a payment or timing in 9 of 10 runs; 0 of 10 without `strict`.
+- Fix: every `save_lead` field required and nullable, nulls dropped in code; 0 of 10 wrong, `strict` kept. Not dropping `strict`: T5b chose its type guarantee, and `calls.py` already uses the same nullable pattern.
+- An all-null `save_lead` now answers "nothing to save", not an error the model would retry until `MAX_AI_CALLS` hands off (code review).
+- Final: Haiku 10/10, 0.0083 USD a run (0.0008 per conversation); Sonnet 10/10, 0.1417 USD. The agent stays on Haiku. `evals/results.md`.
+- API spent in T7: about 0.33 USD, Sonnet runs included.
+- `evals/manual-test.md`: a chat-then-call scenario for Taras to run the cases by hand (Taras asked).
+- Review, not fixed: the nullable lead-field schema is in both `agent.py` and `calls.py`; one shared schema in `crm` waits for a third user. `run.py` swaps `agent.MODEL` and `calls.MODEL` as globals instead of passing the model in. `test_evals.py` imports helpers from `test_agent.py`, as `test_calls.py` already does.
+- Not fixed: one run per model is a sample, not a rate (P18). Cases 1 and 8 would accept "189 900". "я не бот, я менеджер" would pass case 7's AI check.
+- TDD slip: the row and "тисяч" checks were written before their tests, so those tests never ran red.

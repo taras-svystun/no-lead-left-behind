@@ -39,22 +39,26 @@ Rules:
 {policies}"""
 
 # Haiku once sent hand_off without a reason; strict makes the API return only schema-valid input.
+# Every save_lead field is required but may be null: with optional fields, strict Haiku invented
+# a payment or timing the buyer never said in 9 of 10 runs; with null it did in 0 of 10.
+# The API rejects "enum" next to a type list, so a choice or null is an anyOf.
 TOOLS = [
     {
         "name": "save_lead",
         "strict": True,
-        "description": "Save what the buyer told you on their lead in the CRM. Pass only the fields you learned.",
+        "description": "Save what the buyer told you on their lead in the CRM. Use null for every field the buyer did not tell you.",
         "input_schema": {
             "type": "object",
             "properties": {
-                "name": {"type": "string"},
-                "phone": {"type": "string"},
-                "complex": {"type": "string", "enum": ["North", "River"]},
-                "rooms": {"type": "integer", "description": "0 for a studio"},
-                "budget_usd": {"type": "integer"},
-                "timing": {"type": "string", "description": "When the buyer plans to buy, e.g. 'within 3 months'"},
-                "payment": {"type": "string", "enum": ["full", "instalments", "mortgage"]},
+                "name": {"type": ["string", "null"]},
+                "phone": {"type": ["string", "null"]},
+                "complex": {"anyOf": [{"type": "string", "enum": ["North", "River"]}, {"type": "null"}]},
+                "rooms": {"type": ["integer", "null"], "description": "0 for a studio"},
+                "budget_usd": {"type": ["integer", "null"]},
+                "timing": {"type": ["string", "null"], "description": "When the buyer plans to buy, e.g. 'within 3 months'"},
+                "payment": {"anyOf": [{"type": "string", "enum": ["full", "instalments", "mortgage"]}, {"type": "null"}]},
             },
+            "required": ["name", "phone", "complex", "rooms", "budget_usd", "timing", "payment"],
             "additionalProperties": False,
         },
     },
@@ -214,8 +218,13 @@ class Agent:
         return self._handoff_text(telegram_id)
 
     def _save_lead(self, lead_id, call):
+        # Null is "not said": it must not erase what the lead already has.
+        stated = {name: value for name, value in call.input.items() if value is not None}
+        if not stated:
+            # Not an error: the model would retry it until MAX_AI_CALLS hands off.
+            return {"type": "tool_result", "tool_use_id": call.id, "content": "nothing to save"}
         try:
-            crm.update_lead(self.db, lead_id, **call.input)
+            crm.update_lead(self.db, lead_id, **stated)
         except (ValueError, sqlite3.IntegrityError) as error:
             return {"type": "tool_result", "tool_use_id": call.id, "content": str(error), "is_error": True}
         return {"type": "tool_result", "tool_use_id": call.id, "content": "saved"}

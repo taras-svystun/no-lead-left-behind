@@ -28,8 +28,9 @@ def text(content):
     return _message([TextBlock(type="text", text=content)], "end_turn")
 
 
-def tool_call(name, said=None, **tool_input):
+def tool_call(name, /, said=None, **tool_input):
     """A response that calls a tool; `said` is text the model writes in the same response."""
+    # `/`: save_lead has its own `name` field, which must land in tool_input.
     block = ToolUseBlock(type="tool_use", id=f"toolu_{name}", name=name, input=tool_input)
     content = [TextBlock(type="text", text=said), block] if said else [block]
     return _message(content, "tool_use")
@@ -161,6 +162,33 @@ def test_save_lead_fills_the_lead_and_the_ai_goes_on_to_answer():
     assert reply.text.endswith("Дякую! Коли плануєте купівлю?")
     tool_result = client.requests[1]["messages"][-1]["content"][0]
     assert (tool_result["type"], tool_result.get("is_error", False)) == ("tool_result", False)
+
+
+def test_save_lead_writes_only_the_fields_the_buyer_stated():
+    # Strict tools send every field; null means "not said" and must not erase what the lead has.
+    bot, db, _ = make_agent(
+        tool_call("save_lead", name=None, phone=None, complex=None, rooms=2, budget_usd=95000, timing=None, payment=None),
+        text("Як плануєте платити?"),
+    )
+    lead_id = crm.create_lead(db, "telegram", BUYER)
+    crm.update_lead(db, lead_id, payment="full")
+
+    bot.reply(BUYER, "Шукаю двокімнатну, бюджет до 95 тисяч доларів")
+
+    lead = crm.find_by_telegram_id(db, BUYER)
+    assert (lead["rooms"], lead["budget_usd"], lead["payment"]) == (2, 95000, "full")
+
+
+def test_save_lead_with_every_field_null_is_not_an_error():
+    # Without this, the model might retry an error until MAX_AI_CALLS forces a handoff.
+    nothing = dict(name=None, phone=None, complex=None, rooms=None, budget_usd=None, timing=None, payment=None)
+    bot, db, client = make_agent(tool_call("save_lead", **nothing), text("Скільки кімнат шукаєте?"))
+
+    reply = bot.reply(BUYER, "Добрий день")
+
+    assert crm.find_by_telegram_id(db, BUYER)["status"] == "new"
+    assert reply.text.endswith("Скільки кімнат шукаєте?")
+    assert client.requests[1]["messages"][-1]["content"][0].get("is_error", False) is False
 
 
 def test_save_lead_with_a_value_the_crm_rejects_reports_an_error_to_the_ai():
