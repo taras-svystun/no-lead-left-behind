@@ -87,3 +87,15 @@ Estimate 0:15; took about 0:10.
 ## 2026-10-30: Done steps get a ✅
 
 A done step in `docs/PLAN.md` gets ✅ before its name: Taras sees progress at a glance. The rule is one line in CLAUDE.md, because implementer sessions read CLAUDE.md, not the journal.
+
+## 2026-10-30: Unique IDs in the plan
+
+No estimate in the plan; took about 0:15.
+
+- Tickets, polish items and decisions are T1-T8, P1-P13, D1-D19: four lists all numbered from 1 let "ticket 3" mean two things to Taras and to agents.
+- `## Steps` became `## Tickets`; "step" now means any finished piece of work (GLOSSARY).
+- The Core table went: it repeated the tickets under other numbers; each ticket now carries its "Why", the total moved to Tickets, the "Decided" paragraph became D15-D19.
+- Order is Tickets -> Polish -> Decisions: what is worked on now comes first, reference last.
+- T1 marked ✅: Taras approved it and the critic ran; "Status:" fields dropped, the ✅ is the one signal.
+- D6 no longer says the free-text name limit has "its own test case": test-cases.md lists it as a known limit, not a case.
+- References updated in CLAUDE.md, GLOSSARY.md, WORKFLOW.md and docs/agents/issue-tracker.md; journal entries before this one keep the old numbers.

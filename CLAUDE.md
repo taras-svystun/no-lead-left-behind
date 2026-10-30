@@ -4,7 +4,7 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 
 - `docs/BRIEF.md`: why the project exists, who reads it, what Taras cares about, hard constraints. Read it at the start of every session.
 - `docs/WORKFLOW.md`: the build stages and which session does what. Read it to know your role and which files to read and write.
-- `docs/PLAN.md`: scope (core / polish), open questions, tickets. Read it when starting a step.
+- `docs/PLAN.md`: tickets (T), polish items (P), decisions (D). Read it when starting a ticket.
 - `delivery/`: the client-facing documents (spec, test cases, ...). The spec and test cases are also the build spec.
 - `GLOSSARY.md`: the project's words. Use them in code, docs and commits. Matt Pocock skills that ask for `CONTEXT.md` use this file.
 - `docs/journal.md`: what each finished step did and why, and the critic's findings.
@@ -25,6 +25,6 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 ## Finishing a step
 
 - The journal entry says how long the step took against its estimate in `docs/PLAN.md`.
-- Mark a done step in `docs/PLAN.md` with ✅ before its name.
+- Mark a done ticket in `docs/PLAN.md` with ✅ before its name.
 - Stop after each step for Taras's review before starting the next.
 - End each session with what comes next (stage or ticket) and the exact command or prompt from `docs/WORKFLOW.md` to start it.

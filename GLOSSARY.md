@@ -33,8 +33,11 @@ The whole flow as one story: `docs/STORY.md`.
 
 ## Build process
 
-- **Core**: the part built first (2-4 hours), enough to apply with.
-- **Polish**: everything after applying.
+- **Core**: the part built first (2-4 hours), enough to apply with: tickets T1-T8.
+- **Polish**: everything after applying: items P1-P13 in `docs/PLAN.md`.
 - **Delivery documents**: the client-facing documents in `delivery/`.
 - **Planner / implementer / critic**: the three session roles in `docs/WORKFLOW.md`. One AI, separate fresh sessions.
-- **Ticket**: one numbered step in `docs/PLAN.md`, with its check.
+- **Ticket**: one build item in `docs/PLAN.md`, `## Tickets`, named T1, T2, …, with its why, check and blockers.
+- **Polish item**: a planned piece after applying, named P1, P2, …; it becomes a ticket when its turn comes.
+- **Decision**: a settled choice in `docs/PLAN.md`, `## Decisions`, named D1, D2, ….
+- **Step**: any finished piece of work, a ticket or a single request; not a numbered item.
