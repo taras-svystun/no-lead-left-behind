@@ -25,5 +25,6 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 ## Finishing a step
 
 - The journal entry says how long the step took against its estimate in `docs/PLAN.md`.
+- Mark a done step in `docs/PLAN.md` with ✅ before its name.
 - Stop after each step for Taras's review before starting the next.
 - End each session with what comes next (stage or ticket) and the exact command or prompt from `docs/WORKFLOW.md` to start it.

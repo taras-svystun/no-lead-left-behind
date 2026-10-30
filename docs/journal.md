@@ -83,3 +83,7 @@ Estimate 0:15; took about 0:10.
 - No year, quarter or percentage anywhere: cases 5 and 6 fail on them, and the agent repeats what its prompt holds. So instalments are "12 equal payments" and the mortgage terms are the bank's.
 - Same total for every payment method: a cheaper price for full payment would be a discount the agent could quote.
 - For ticket 7: case 6's "no total below 89,900" also fails a fair answer that offers a cheaper flat (River, 2 rooms, 69,600). Check only the North 2-room price, or accept totals that are other rows of the list.
+
+## 2026-10-30: Done steps get a ✅
+
+A done step in `docs/PLAN.md` gets ✅ before its name: Taras sees progress at a glance. The rule is one line in CLAUDE.md, because implementer sessions read CLAUDE.md, not the journal.
