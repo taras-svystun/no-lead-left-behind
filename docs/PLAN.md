@@ -35,7 +35,7 @@ Code lives in `app/`, tests in `tests/`, evals in `evals/`, knowledge files in `
 - **P5.** Weekly client status.
 - **P6.** Pilot report against a baseline (simulated, labelled).
 - **P7.** Risk register; remaining ADRs.
-- **P8.** Local name detection in redaction (NER model or a small local LLM, next to the regex), measured on a test case with a name only in free text: closes the known redaction limit without sending data out.
+- **P8.** Local name detection in redaction (NER model or a small local LLM, next to the regex), measured on a test case with a name only in free text: closes the known redaction limit without sending data out. Also a lead name saved in Latin ("Olena") against Cyrillic in the transcript ("Олена").
 - **P9.** Redact Telegram chats before Claude: phones and emails the buyer types become placeholders, and code saves the real values to the lead. Measured on a case where the buyer types a phone. Promised in D6.
 - **P10.** Real Bitrix24 instead of SQLite.
 - **P11.** Price lookup tool instead of the price list in the prompt, for prices too many or too fresh for a prompt.
