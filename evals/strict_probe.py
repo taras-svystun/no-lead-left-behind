@@ -2,7 +2,7 @@
 
 Case 2's first message names only rooms and budget. Each schema answers it RUNS times;
 the probe prints every run that saved a field wrong, and the count per schema.
-Measured in T7: wrong in 9 of 10 (strict, optional), 0 of 10 (not strict), 0 of 10 (strict, nullable).
+Results, T7 and T7a side by side: evals/results.md.
 
     python -m evals.strict_probe
 
@@ -92,8 +92,12 @@ def main():
         for run in range(RUNS):
             recorder = Recorder(client, agent.MODEL)
             db, bot = new_chat(recorder)
-            bot.reply(BUYER, MESSAGE)
-            wrong = wrong_fields(crm.find_by_telegram_id(db, BUYER))
+            try:
+                bot.reply(BUYER, MESSAGE)
+                wrong = wrong_fields(crm.find_by_telegram_id(db, BUYER))
+            except Exception as error:
+                # Seen without strict: hand_off called with no reason, so the agent crashed.
+                wrong = {"crashed": repr(error)}
             total += recorder.usd
             if wrong:
                 wrong_runs += 1

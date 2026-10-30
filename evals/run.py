@@ -4,14 +4,19 @@ Judged by code, not an LLM (D17); each case checks actions and data, not wording
 
     python -m evals.run                            # Haiku 5.5
     python -m evals.run --model claude-sonnet-5-5  # the comparison run (D14)
+    python -m evals.run --runs 30                  # each case 30 times, in parallel: a pass rate
+    python -m evals.run --failures evals/failures  # also save each failed conversation as JSON
 """
 
 import argparse
 import json
 import re
 import sys
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 
 import anthropic
 
@@ -319,6 +324,7 @@ class Result:
     failures: list
     ai_calls: int
     usd: float
+    transcript: dict = None  # a failed run's last request and response, to read why it failed
 
 
 def run_case(number, client, model):
@@ -332,7 +338,16 @@ def run_case(number, client, model):
     # A reply cut at the token ceiling could end inside a tool call (see max_tokens in app/agent.py).
     if any(response.stop_reason == "max_tokens" for response in recorder.responses):
         found.append("a response hit max_tokens")
-    return Result(number, found, len(recorder.requests), recorder.usd)
+    transcript = None
+    if found and recorder.responses:
+        last = recorder.responses[-1]
+        transcript = {
+            "case": number,
+            "failures": found,
+            "messages": json.loads(recorder.requests[-1])["messages"],
+            "last_response": {"stop_reason": last.stop_reason, "content": [block.model_dump() for block in last.content]},
+        }
+    return Result(number, found, len(recorder.requests), recorder.usd, transcript)
 
 
 def report(model, results):
@@ -353,20 +368,70 @@ def report(model, results):
     return "\n".join(lines)
 
 
+def tally(results):
+    """Each case's runs as (number, passes, runs, mean USD per run, each failure message with its count)."""
+    by_case = {}
+    for result in results:
+        by_case.setdefault(result.number, []).append(result)
+    rows = []
+    for number, runs in sorted(by_case.items()):
+        passes = sum(1 for result in runs if not result.failures)
+        messages = Counter(message for result in runs for message in result.failures)
+        rows.append((number, passes, len(runs), sum(result.usd for result in runs) / len(runs), messages))
+    return rows
+
+
+def rate_report(model, results):
+    """Each case's passes out of N, ready for evals/results.md."""
+    rows = tally(results)
+    total = sum(result.usd for result in results)
+    lines = [
+        f"### {model}, {rows[0][2]} runs per case, {datetime.now(KYIV):%Y-%m-%d %H:%M} Kyiv",
+        "",
+        "| Case | Passed | Cost per run (USD) | Why it failed (times) |",
+        "|---|---|---|---|",
+    ]
+    for number, passes, runs, usd, messages in rows:
+        why = "; ".join(f"{message} (×{count})" for message, count in messages.most_common())
+        why = why.replace("|", "/").replace("\n", " ")
+        lines.append(f"| {number}. {CASES[number][0]} | {passes}/{runs} | {usd:.4f} | {why} |")
+    lines += ["", f"{len(results)} conversations. Total {total:.4f} USD; {total / len(results):.4f} USD per conversation."]
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--model", default=agent.MODEL, choices=sorted(PRICES))
     parser.add_argument("--case", type=int, action="append", choices=sorted(CASES), help="run only these cases")
+    parser.add_argument("--runs", type=int, default=1, help="run each case this many times, in parallel")
+    parser.add_argument("--failures", type=Path, help="save each failed conversation as JSON in this folder")
     args = parser.parse_args()
     load_env()
     # The agent and the call webhook read their module's MODEL on each call.
     agent.MODEL = calls.MODEL = args.model
     client = anthropic.Anthropic()
-    results = []
-    for number in args.case or CASES:
-        results.append(run_case(number, client, args.model))
-        print(f"case {number}: {'fail' if results[-1].failures else 'pass'}", file=sys.stderr)
-    print(report(args.model, results))
+    if args.runs == 1:
+        results = []
+        for number in args.case or CASES:
+            results.append(run_case(number, client, args.model))
+            print(f"case {number}: {'fail' if results[-1].failures else 'pass'}", file=sys.stderr)
+        print(report(args.model, results))
+    else:
+        # Threads, because each run waits on the API; every run builds its own CRM inside its thread.
+        numbers = [number for number in args.case or CASES for _ in range(args.runs)]
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            results = list(pool.map(lambda number: run_case(number, client, args.model), numbers))
+        print(rate_report(args.model, results))
+    if args.failures:
+        save_failures(args.failures, results)
+
+
+def save_failures(folder, results):
+    folder.mkdir(parents=True, exist_ok=True)
+    for index, result in enumerate(results):
+        if result.transcript:
+            path = folder / f"case-{result.number}-run-{index + 1}.json"
+            path.write_text(json.dumps(result.transcript, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

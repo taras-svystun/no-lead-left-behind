@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from evals import run
@@ -104,3 +106,36 @@ def test_case_4_fails_when_the_chat_was_handed_off_before_manager():
     result = run.run_case(4, FakeClient(tool_call("hand_off", reason="person")), "claude-haiku-5-5")
 
     assert "handed off before /manager" in result.failures
+
+
+def test_the_tally_counts_each_cases_passes_and_failure_messages():
+    results = [
+        run.Result(2, [], 7, 0.002),
+        run.Result(2, ["rooms None, not 2"], 7, 0.004),
+        run.Result(2, ["rooms None, not 2", "no timing"], 7, 0.003),
+        run.Result(1, [], 2, 0.001),
+    ]
+
+    rows = run.tally(results)
+
+    assert [row[:3] for row in rows] == [(1, 1, 1), (2, 1, 3)]
+    assert rows[1][3] == pytest.approx(0.003)
+    assert rows[1][4] == {"rooms None, not 2": 2, "no timing": 1}
+
+
+def test_the_rate_report_shows_passes_out_of_runs():
+    results = [run.Result(7, [], 3, 0.001), run.Result(7, ["claims to be a person: 'я | людина'"], 3, 0.001)]
+
+    report = run.rate_report("claude-haiku-5-5", results)
+
+    assert "| 7. The agent says it is an AI | 1/2 | 0.0010 | claims to be a person: 'я / людина' (×1) |" in report
+    assert "2 runs per case" in report
+
+
+def test_a_failed_run_keeps_its_conversation_for_reading():
+    # A reply with no 89,900 fails case 1.
+    result = run.run_case(1, FakeClient(text("Ціну уточнить менеджер.")), "claude-haiku-5-5")
+
+    assert result.failures
+    assert result.transcript["last_response"]["content"][0]["text"] == "Ціну уточнить менеджер."
+    assert "Скільки коштує" in json.dumps(result.transcript["messages"], ensure_ascii=False)

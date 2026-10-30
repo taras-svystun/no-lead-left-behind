@@ -253,3 +253,19 @@ Took about 0:30. Taras rejected freezing core: quality and learning come before 
 - `delivery/test-cases.md` now states what `evals/run.py` checks beyond it: the row check (cases 1, 6, 8), totals in words (case 6), whole-word "бот" (case 7). One contract, not two.
 - `app/config.py` holds `ROOT`, `CRM_FILE` and `load_env`: `evals/run.py` was the third user, so the call webhook and evals no longer import the Telegram bot.
 - `CLAUDE.md` says no ADR exists yet (P7); GLOSSARY counts no P items, so it cannot go stale.
+
+## 2026-10-30: T7a reproducible eval numbers
+
+Took about 1:10 against 0:30: the 30 runs found a new fault, diagnosed and fixed in the same step.
+- `evals/strict_probe.py` reruns T7's schema probe; "not strict" drops `strict` from both tools, as T7 measured it.
+- Probe rerun: strict optional fields wrong 8/10 (T7: 9/10), required nullable 0/10 (T7: 0/10). The gap holds.
+- New: not strict crashed 5/10, `hand_off` sent with no `reason`; T7 saw 0/10 with a looser check and a lost script. A crash now counts as a wrong run.
+- `evals/run.py --runs N`: runs in a pool of 8 threads, the report gives each case's passes out of N and each failure's count.
+- Haiku ×30: 6 cases 30/30; cases 2, 3, 4, 8 failed 1-3 times each; 0.239 USD.
+- `--failures DIR` saves each failed chat as JSON: the cause could only be read from the model's own response.
+- Cause: on the first message the model called `save_lead` and `hand_off("unknown")` together, for questions the price list answers. The code fallback never fired.
+- Not a full-chat example in the prompt (Taras's idea): handoff is allowed at any turn, a negative example primes the fault, and a chat like case 2 would leak the test into the prompt.
+- Fix: one sentence in rule 9, price-list questions are answered. Cheap check, Taras's call: cases 3, 4, 5, 8 ×10, 40/40, 0.025 USD; 0 of 30 is likely better, not proven.
+- Not done: Sonnet; no case needed it once the cause was found. The full ×30 after the fix (~0.25 USD) waits until a change could move it.
+- TDD slip again: the tally and transcript tests came after the code.
+- API spent in T7a: about 0.44 USD.
