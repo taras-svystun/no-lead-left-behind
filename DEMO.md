@@ -6,7 +6,8 @@
 2. **Термінал 1, бот:** `.venv/bin/python -m app.bot`. Таблицю в `crm.sqlite` бот створює одразу при старті.
 3. **Термінал 2, панель CRM.** Запускай її тоді, коли бот уже пише "Bot started", але до першого повідомлення. Тоді на відео видно, як лід з'являється і заповнюється. Команда раз на секунду перечитує таблицю й перемальовує екран:
    ```sh
-   while true; do clear; sqlite3 -line crm.sqlite "SELECT name,phone,complex,rooms,budget_usd,timing,payment,status,handoff_reason FROM leads"; sleep 1; done
+   while true; do clear; sqlite3 -readonly -line ~/Documents/Projects/no-lead-left-behind/crm.sqlite "SELECT name, substr(phone,1,4)||'*****'||substr(phone,-2) AS phone, complex,rooms,budget_usd,timing,payment,status,handoff_reason FROM leads"; sleep 1; done
+
    ```
    Зупиняється через Ctrl+C.
 4. **Розкладка.** Telegram ліворуч, термінал праворуч, шрифт терміналу збільш через Cmd+ +. На GIF дрібний текст не прочитати.
