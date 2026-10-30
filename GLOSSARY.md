@@ -8,7 +8,7 @@ A public showcase of one AI-agent deployment for a fictional residential develop
 - **Lead**: a record in the CRM for one buyer, with their contact and what they want.
 - **Simulated CRM**: the core's stand-in for the client's CRM, one SQLite table; Bitrix24 replaces it in polish.
 - **Agent**: the one Claude-based assistant that answers buyers in Telegram.
-- **Tool**: an action the agent can call: price lookup, create lead, hand off.
+- **Tool**: an action the agent can call: create lead, hand off. Price lookup joins in polish.
 - **Handoff**: the agent stops and passes the buyer to a manager.
 - **Qualification**: the questions that tell how serious a buyer is and what they need (budget, rooms, timing, payment method).
 - **After-call webhook**: the message the telephony system sends to us after each phone call ends.

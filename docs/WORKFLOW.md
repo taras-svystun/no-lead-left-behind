@@ -34,7 +34,7 @@ Taras reviews after each stage before the next one starts.
 > You are the critic. You did not write the plan or the code, and you owe them nothing.
 > Read `docs/BRIEF.md` (the yardstick), then `docs/PLAN.md`, `docs/WORKFLOW.md`, `CLAUDE.md`, `GLOSSARY.md`, `delivery/` (and for a build review, `git diff <last-critic-commit>..HEAD`).
 > Judge one thing: does this give Taras the most value for the least work, against the brief?
-> Report only game-changing findings: ones that change what the founder sees, whether the core fits its budget, or how well the brief is served. Fewer is better, and none is a valid answer; drop anything you would have to stretch to justify. Most important first. For each, quote the exact text, say what goes wrong, and give the fix and its time cost, in 2-4 sentences. Kinds:
+> Report game-changing findings: how well the brief is served or ones that change what the founder sees. Drop anything you would have to stretch to justify. Most important first. For each, quote the exact text, say what goes wrong, and give the fix and its time cost, in 2-4 sentences. Kinds:
 > - **Cut**: what can go, or move from core to polish, and the time it saves.
 > - **Missing**: what the brief needs and the plan lacks.
 > - **Simplify**: what can be done with fewer parts.

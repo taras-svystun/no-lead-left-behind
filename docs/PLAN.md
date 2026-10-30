@@ -16,13 +16,13 @@ Show how Taras runs one AI-agent deployment end to end, smallest version that so
 | 1 | `delivery/spec.md`, one page, opening with 5 lines of discovery findings | The take-home task; discovery merged in, no separate file | 0:40 |
 | 2 | `delivery/test-cases.md`: 10 given / when / then cases | The contract | 0:40 |
 | 3 | Knowledge files: fictional price list and policies | Agent answers from data, not invention | 0:15 |
-| 4 | Agent on Claude, 3 tools (price lookup, create lead, hand off), leads in SQLite, Telegram via long polling | Walking skeleton: Telegram -> agent -> lead | 1:15 |
+| 4 | Agent on Claude, price list in the system prompt, 2 tools (create lead, hand off), leads in SQLite, Telegram via long polling | Walking skeleton: Telegram -> agent -> lead | 1:00 |
 | 5 | Call webhook: sample Ringostat-style payload -> remove personal data -> note on the lead, unit-tested | The take-home's "check a sample webhook"; second half of the story | 0:30 |
 | 6 | Eval runner: 10 cases judged by code, pass/fail, cost per conversation; one case is the end-to-end test | Proves "good" with numbers | 0:40 |
 | 7 | README case study + "how I'd run this deployment", week by week (6-8 lines) + Telegram GIF with frame notes + 5 lines "what breaks at 10x" | What the founder opens; the role is delivery-first | 0:45 |
-| | **Total** | | **~4:45** |
+| | **Total** | | **~4:30** |
 
-Decided: leads in a simulated CRM (SQLite), not Bitrix24 (Python stdlib, no server; Bitrix24 waits for polish). Evals judged by code; no LLM judge in core. No live bot: GIF.
+Decided: leads in a simulated CRM (SQLite), not Bitrix24 (Python stdlib, no server; Bitrix24 waits for polish). Price list in the system prompt, not a tool: about 12 rows fit, and the agent cannot skip a lookup and invent a price. Evals judged by code; no LLM judge in core. Each test case checks actions and data (tool calls, lead rows, exact prices), not wording: wording varies per run. No live bot: GIF.
 
 ## Polish (in order)
 
@@ -34,8 +34,9 @@ Decided: leads in a simulated CRM (SQLite), not Bitrix24 (Python stdlib, no serv
 6. Pilot report against a baseline (simulated, labelled).
 7. Risk register; remaining ADRs.
 8. Real Bitrix24 instead of SQLite.
-9. LLM judge for answer quality, as extra test cases.
-10. "Notes for product" in the README.
+9. Price lookup tool instead of the price list in the prompt, for prices too many or too fresh for a prompt.
+10. LLM judge for wording and tone, which code cannot check, as extra test cases.
+11. "Notes for product" in the README.
 
 ## Open questions for the grill
 

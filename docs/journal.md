@@ -26,4 +26,6 @@ No estimate in the plan. Findings and Taras's calls:
 - Applied: glossary says "no LLM judge in core"; SQLite is named the simulated CRM.
 - Applied: critic prompt asks only for game-changing findings, 2-4 sentences each, none allowed: Taras found the small ones padded.
 - Declined: a budget line for setup and the GIF: estimates are rough anyway; a Telegram test account exists.
-- Pending Taras's answer: price list in the system prompt instead of a price tool; test cases written as checks on actions and data, not wording.
+- Applied: price list in the system prompt, not a price tool (-0:15; core ~4:30); price lookup tool is polish 9.
+- Applied: test cases check actions and data, not wording; the LLM judge for wording stays as polish 10.
+- Taras's edit: critic prompt no longer weighs the time budget or says that zero findings is fine.
