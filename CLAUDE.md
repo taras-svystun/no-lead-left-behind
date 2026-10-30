@@ -26,5 +26,6 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 
 - The journal entry says how long the step took against its estimate in `docs/PLAN.md`.
 - Mark a done ticket in `docs/PLAN.md` with ✅ before its name.
+- A ticket that needs Taras's approval gets ⏳ before its name and ends with a review card in chat: up to 5 decisions to confirm, one line each with a link; name a file to read in full only when it must be, and why. A session whose ticket is blocked by a ⏳ ticket shows that card and stops.
 - Stop after each step for Taras's review before starting the next.
 - End each session with what comes next (stage or ticket) and the exact command or prompt from `docs/WORKFLOW.md` to start it.

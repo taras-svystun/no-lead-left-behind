@@ -99,3 +99,7 @@ No estimate in the plan; took about 0:15.
 - T1 marked ✅: Taras approved it and the critic ran; "Status:" fields dropped, the ✅ is the one signal.
 - D6 no longer says the free-text name limit has "its own test case": test-cases.md lists it as a known limit, not a case.
 - References updated in CLAUDE.md, GLOSSARY.md, WORKFLOW.md and docs/agents/issue-tracker.md; journal entries before this one keep the old numbers.
+
+## 2026-10-30: Review cards and ⏳
+
+Taras missed that T1 awaited his approval: the request was a status line in the plan, and approving meant reading a client document. Now a ticket that needs him gets ⏳ and a review card in chat (up to 5 decisions, one line each); a session blocked by a ⏳ ticket shows the card and stops. Rejected: a summary atop `spec.md`: it would mix the client's document with notes for Taras.
