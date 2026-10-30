@@ -136,7 +136,7 @@ def test_manager_as_the_very_first_message_still_opens_with_the_disclosure():
     assert client.requests == []
 
 
-def test_the_ai_gets_the_price_list_the_policies_and_both_tools():
+def test_the_ai_gets_the_price_list_the_policies_and_both_tools_in_strict_mode():
     bot, _, client = make_agent(text("89 900 USD."))
 
     bot.reply(BUYER, "Скільки коштує двокімнатна в North?")
@@ -145,6 +145,7 @@ def test_the_ai_gets_the_price_list_the_policies_and_both_tools():
     assert "| North | 2 | 62 | 1,450 | 89,900 |" in request["system"]
     assert "Discounts or special prices" in request["system"]
     assert [tool["name"] for tool in request["tools"]] == ["save_lead", "hand_off"]
+    assert all(tool["strict"] is True for tool in request["tools"])
 
 
 def test_save_lead_fills_the_lead_and_the_ai_goes_on_to_answer():

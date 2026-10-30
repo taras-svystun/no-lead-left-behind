@@ -216,3 +216,11 @@ Took about 0:25 against 0:50 (agent time; the clock was not tracked closely).
 - Not fixed: phone redaction over-reaches: "+380000000001 2 рази" loses the "2", and "100 000 - 120 000" (12 digits joined by a dash) becomes [PHONE]. Over-redaction is the safe side.
 - Not fixed: a lead name saved in Latin ("Olena") does not match "Олена" in a transcript. P8 territory.
 - Not fixed: `calls.py` imports `ROOT`, `CRM_FILE` and `load_env` from `bot.py`; a shared config module waits until a third user needs them.
+
+## 2026-10-30: T5b strict tools
+
+Took about 0:20 against 0:10: two live checks and the code review.
+- `"strict": True` on `save_lead` and `hand_off`; the API accepted both schemas unchanged (live case 1 passed).
+- Live, "Привіт, є студії?" 4 times: no crash; 1 handoff, now with reason `unknown`, still a wrong handoff (P18).
+- Kept the CRM's `ValueError` handling: strict checks types and enums, not meaning (a negative budget passes the schema).
+- Not checked: a reply cut at `max_tokens` could still end inside a tool call; unlikely at 2048 tokens.

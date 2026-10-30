@@ -38,9 +38,11 @@ Rules:
 
 {policies}"""
 
+# Haiku once sent hand_off without a reason; strict makes the API return only schema-valid input.
 TOOLS = [
     {
         "name": "save_lead",
+        "strict": True,
         "description": "Save what the buyer told you on their lead in the CRM. Pass only the fields you learned.",
         "input_schema": {
             "type": "object",
@@ -58,6 +60,7 @@ TOOLS = [
     },
     {
         "name": "hand_off",
+        "strict": True,
         "description": "Pass the buyer to a human manager. The buyer is told when the manager will write.",
         "input_schema": {
             "type": "object",
