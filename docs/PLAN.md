@@ -34,12 +34,12 @@ Code lives in `app/`, tests in `tests/`, evals in `evals/`, knowledge files in `
 - **P6.** Pilot report against a baseline (simulated, labelled).
 - **P7.** Risk register; remaining ADRs.
 - **P8.** Local name detection in redaction (NER model or a small local LLM, next to the regex), measured on a test case with a name only in free text: closes the known redaction limit without sending data out.
-- **P9.** Real Bitrix24 instead of SQLite.
-- **P10.** Price lookup tool instead of the price list in the prompt, for prices too many or too fresh for a prompt.
-- **P11.** LLM judge for wording and tone, which code cannot check, as extra test cases.
-- **P12.** "Notes for product" in the README.
-- **P13.** Local open-source chat model as an eval experiment: run the same 10 cases, compare pass rate and cost with Haiku. Not a replacement unless it passes.
-- **P14.** Redact Telegram chats before Claude: phones and emails the buyer types become placeholders, and code saves the real values to the lead. Measured on a case where the buyer types a phone. Promised in D6.
+- **P9.** Redact Telegram chats before Claude: phones and emails the buyer types become placeholders, and code saves the real values to the lead. Measured on a case where the buyer types a phone. Promised in D6.
+- **P10.** Real Bitrix24 instead of SQLite.
+- **P11.** Price lookup tool instead of the price list in the prompt, for prices too many or too fresh for a prompt.
+- **P12.** LLM judge for wording and tone, which code cannot check, as extra test cases.
+- **P13.** "Notes for product" in the README.
+- **P14.** Local open-source chat model as an eval experiment: run the same 10 cases, compare pass rate and cost with Haiku. Not a replacement unless it passes.
 
 ## Decisions
 
@@ -50,7 +50,7 @@ D1-D14 come from the grill (2026-10-30); D15-D19 were settled before it.
 - **D3.** Every file in English; the bot replies in the buyer's language.
 - **D4.** Client A (all numbers simulated): 2 residential complexes in Kyiv, 6 managers, ~400 inbound conversations a month, ~40% of CRM leads miss budget or rooms, median first reply 2 hours. Price list ~12 rows (flat types per complex, price per m2; payment: 100%, 12-month instalments, partner-bank mortgage). Policies: booking, viewings, what the agent never promises (discounts, completion dates).
 - **D5.** One lead per buyer: the agent asks for a phone number during qualification; the after-call webhook finds the lead by phone, else creates a new lead. Ringostat sends no CRM lead id (help.ringostat.com webhook docs, seen 2026-10-30).
-- **D6.** Redaction covers the call transcript only: code, not Claude: regex for phones and emails, plus the names we already know (the buyer's from the lead found by phone, the manager's from the payload's `employee_fio`; Ringostat sends no caller name). Sending text to Claude to clean it would defeat the purpose. Telegram chats go to Claude as written; the spec says so. Names only in free text slip through: a known limit, written under the test cases; P8 closes it. Redacting chats with placeholders is P14.
+- **D6.** Redaction covers the call transcript only: code, not Claude: regex for phones and emails, plus the names we already know (the buyer's from the lead found by phone, the manager's from the payload's `employee_fio`; Ringostat sends no caller name). Sending text to Claude to clean it would defeat the purpose. Telegram chats go to Claude as written; the spec says so. Names only in free text slip through: a known limit, written under the test cases; P8 closes it. Redacting chats with placeholders is P9.
 - **D7.** The agent says it is an AI in its first message and whenever asked; it never passes itself off as a human.
 - **D8.** Handoff triggers: buyer asks for a person or sends `/manager` (any time, no Claude call); ready to view or book; question outside the price list and policies; complaint. The handoff tool sets lead status `handoff` with a reason; the buyer is told a manager writes within 15 minutes from 9:00 to 19:00 Kyiv time, and by 12:00 at other times (code picks the message by the hour; no "tomorrow": after midnight it would be wrong); manager notification is simulated (a log line). After handoff the agent only repeats that a manager is on it.
 - **D9.** The after-call webhook simulates Ringostat's "call processed by AI" event: the after-call event has phone and recording link but no transcript. One Claude call on the redacted transcript writes the summary and the qualification fields, which Ringostat's own free-text summary does not fill.
@@ -59,9 +59,9 @@ D1-D14 come from the grill (2026-10-30); D15-D19 were settled before it.
 - **D12.** No speech-to-text of our own: Ringostat already transcribes calls, so ours would only duplicate a vendor feature.
 - **D13.** The 10 test cases: (1) price question -> exact price; (2) partial qualification -> asks the rest, phone included -> right lead fields; (3) wants a viewing -> handoff "viewing"; (4) `/manager` -> handoff, no Claude call; (5) question outside price list and policies -> no invention, handoff "unknown"; (6) asks for a discount -> none promised; (7) "are you human?" -> says it is an AI; (8) writes in English -> answers in English; (9) call from a known phone -> summary and fields on that lead; (10) redaction -> no phone, email or payload name in the request to Claude. Unit tests cover the rest (unknown phone -> new lead; after handoff the agent only repeats that a manager is on it).
 - **D14.** One Sonnet comparison run at the end of core (~0.74 USD): Haiku vs Sonnet pass rate and cost per conversation in the README.
-- **D15.** Leads in a simulated CRM (SQLite), not Bitrix24: Python stdlib, no server; Bitrix24 is P9.
-- **D16.** Price list in the system prompt, not a tool: about 12 rows fit, and the agent cannot skip a lookup and invent a price; the tool is P10.
-- **D17.** Evals judged by code; no LLM judge in core (P11).
+- **D15.** Leads in a simulated CRM (SQLite), not Bitrix24: Python stdlib, no server; Bitrix24 is P10.
+- **D16.** Price list in the system prompt, not a tool: about 12 rows fit, and the agent cannot skip a lookup and invent a price; the tool is P11.
+- **D17.** Evals judged by code; no LLM judge in core (P12).
 - **D18.** Each test case checks actions and data (tool calls, lead rows, exact prices), not wording: wording varies per run.
 - **D19.** No live bot: a GIF.
 - **D20.** "Agent" is the one word for the AI, client documents included: it is the target role's word, and one term beats two (Taras's call).

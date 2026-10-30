@@ -110,3 +110,4 @@ Taras missed that T1 awaited his approval: the request was a status line in the 
 
 - T1 review card: Taras accepted 4 of 5 decisions. The 15-minute promise broke at night (discovery: chats after 19:00 wait until morning), so code picks the handoff message by Kyiv hour: 15 minutes from 9:00 to 19:00, else "by 12:00" (D8; T4 +0:10, core ~5:00). Kept in core, not polish: it is one `if`, and the model need not know the time.
 - "Agent" stays the one word, client documents included (D20): "chatbot" for clients and "agent" elsewhere would be two names for one thing.
+- Polish reordered: chat redaction moved next to name detection (P9); Bitrix24, price tool, LLM judge, product notes, local model are now P10-P14. Entries above keep the old numbers.
