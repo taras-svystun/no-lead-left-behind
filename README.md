@@ -51,12 +51,17 @@ The buyer's name is caught in its Ukrainian forms ("Олена", "Олено"), 
 
 ## Demo
 
-![A whole chat: price, qualification, phone, handoff](docs/demo.gif)
+![A whole chat: qualification, price, phone, handoff](docs/demo.gif)
 
-1. Buyer: "Скільки коштує двокімнатна в North?" (How much is a 2-room flat in North?). Code sends the AI disclosure; the agent quotes 89,900 USD, the exact price-list row.
-2. Buyer gives budget, payment and timing; each answer appears on the lead (right pane).
-3. Buyer taps "Share phone": the phone lands on the lead and the button disappears.
-4. Buyer: "Хочу подивитися квартиру в суботу" (I want to see a flat on Saturday). Handoff: status `handoff`, reason `viewing`, and the manager's time promise.
+Left: the buyer's Telegram, with the live bot. Right: the lead in the CRM (SQLite), refreshed every second. The GIF plays at 1.5x; here is the [full-quality MP4](docs/demo.mp4).
+The phone number is blurred in the chat only because this repo is public.
+
+1. `/start`: code sends the AI disclosure ("I am Client A's AI assistant, not a person") and asks what flat the buyer wants.
+2. "Хочу гарну" (I want a nice one) is too vague, so the agent asks the budget. "82к" becomes `budget_usd: 82000` on the lead.
+3. "2" becomes `rooms: 2`. Asked North or River, the buyer answers "пофіг" (don't care); the agent quotes the price list: River 69,600 USD fits the budget, North 89,900 does not.
+4. "Не знаю" (I don't know) when to buy: the agent offers ranges, and "пів року" (half a year) becomes `timing: within 6 months`. "Частинами" (in instalments) becomes `payment: instalments`, with the terms from the price list.
+5. The buyer taps "Поділитися номером" (Share phone): the phone lands on the lead without passing through Claude.
+6. "Хочу перегляд" (I want a viewing): handoff. The lead gets `status: handoff`, `handoff_reason: viewing`, and code promises a manager within 15 minutes.
 
 ## How I'd run this deployment
 
