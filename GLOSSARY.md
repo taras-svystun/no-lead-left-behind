@@ -18,6 +18,7 @@ The whole flow as one story: `docs/STORY.md`.
 - **Call ID**: the telephony system's id for one call; a second webhook with the same id is a repeat and is skipped.
 - **Duplicate lead**: two leads for one buyer, made when a call's phone matches no existing lead.
 - **Tool**: an action the agent can call: save lead, hand off. Price lookup joins in polish.
+- **Complex**: one of Client A's two residential buildings, North or River; a lead field.
 - **Price list**: Client A's flat types, prices and payment options; the agent quotes only from it.
 - **Policies**: Client A's rules for booking and viewings, and what the agent never promises.
 - **Handoff**: the agent stops and passes the buyer to a manager. The buyer can ask for it at any time with `/manager`.
