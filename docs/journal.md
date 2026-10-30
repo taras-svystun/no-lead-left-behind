@@ -195,3 +195,5 @@ Took about 0:30 against 0:10: the code review found a wrong note after "/start",
 - The note quotes the disclosure the buyer saw, kept per buyer: after "/start" (always Ukrainian) an English first message would otherwise quote the English one.
 - Not fixed: after "/start" the model does not know code asked "what flat are you looking for?", so it may ask again.
 - Not fixed, found live: the model once called `hand_off` with no `reason` ("Привіт, є студії?", old prompt) and `_ask_ai` crashed on `KeyError`; `required` in a tool schema is not enforced without `strict`.
+- T5b added: `"strict": True` on the tools, not a `.get("reason", "unknown")` fallback: the fallback hides one symptom and writes a made-up reason into the CRM (Taras's call).
+- P18 added: a correct handoff is not a right one; measure wrong and missed handoffs on messages labelled in advance, judged by code, 10 runs each, because one live failure in 4 runs is a rate, not a fluke.
