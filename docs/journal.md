@@ -164,4 +164,13 @@ Estimate 0:15; took about 0:50 (a guess from session length), the extra being th
 - `.env` values take no quotes: a quoted token made Telegram answer 404; Taras removed the quotes, so `load_env` stays plain.
 - Live: `getMe` and `setMyCommands` work; queued chats from both allowed IDs created leads 1 and 2 in `crm.sqlite` with no send errors.
 - Not done: the GIF needs Taras's screen; due before T8.
-- Not fixed: the agent's rule 7 says "Share phone" in English while the Ukrainian button reads "Поділитися номером"; the model translates.
+- Not fixed: the agent's rule 8 says "Share phone" in English while the Ukrainian button reads "Поділитися номером"; the model translates.
+
+## 2026-10-30: T5 live chat, Taras's feedback
+
+- Lost memory mid-chat: the agent asked the budget twice and read "both" (rooms) as both complexes. Cause: I restarted the bot at 05:07:11 during the chat, and chats live in memory. Evidence: the same messages with history, run live, read "both" as both room counts. Fix: P16.
+- The agent kept asking rooms after "2-3": `rooms` is one integer, so a range never counts as an answer. P15.
+- Doubled greeting: code sends the AI disclosure and the model greeted and introduced itself again. Prompt rule 2 now forbids it; live, 2 of 3 first replies were clean, one still opened with "Добрий день!". Root fix if needed: let the model see the disclosure in the chat history.
+- "typing..." via `sendChatAction`, not a "thinking..." message: native, leaves nothing in the chat (Taras's call for core).
+- Slow replies (up to a minute by Telegram's clock): not Claude (1-2 s per turn, measured) and not the Telegram API (0.1 s per call). Some waits fell in the restart; others are unexplained, and Telegram shows only minutes. The bot now logs how long after sending each message arrived and how long the agent took.
+- Langfuse: not now. The brief allows no dashboard a test case does not need, and the cloud would take buyer chats out of the client; self-hosted when a pilot has several reviewers (langfuse.com: MIT, self-host free; seen via langwatch.ai, zenml.io, 2026-10-30).

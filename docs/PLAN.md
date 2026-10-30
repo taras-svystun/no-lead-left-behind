@@ -7,7 +7,7 @@ Show how Taras runs one AI-agent deployment end to end, smallest version that so
 ## Phases
 
 - **Core** (2-4 hours, 6 at most): tickets T1-T8, small but finished; then apply.
-- **Polish**: after applying, items P1-P14 in order, as time allows. A P item becomes a ticket when its turn comes.
+- **Polish**: after applying, items P1-P16 in order, as time allows. A P item becomes a ticket when its turn comes.
 
 IDs are unique across the project: T for tickets, P for polish items, D for decisions. Test cases keep their own numbers ("case 1"), from `delivery/test-cases.md`.
 
@@ -40,6 +40,8 @@ Code lives in `app/`, tests in `tests/`, evals in `evals/`, knowledge files in `
 - **P12.** LLM judge for wording and tone, which code cannot check, as extra test cases.
 - **P13.** "Notes for product" in the README.
 - **P14.** Local open-source chat model as an eval experiment: run the same 10 cases, compare pass rate and cost with Haiku. Not a replacement unless it passes.
+- **P15.** Room ranges: "2-3" or "both" is an answer, saved as a range on the lead (changes the CRM contract), with a test case; today `rooms` is one integer, so the agent asks again.
+- **P16.** Chats in SQLite instead of memory, so a restart forgets nothing: the whole chat (a qualification is ~20 messages, ~3k tokens, no trimming needed); a chat idle for 24 hours is deleted, to keep no personal data longer than needed. Each turn also stores its latency, tokens and cost, which is the log for diagnosing chats. Langfuse waits for a real pilot with several reviewers, self-hosted, so chats stay with the client.
 
 ## Decisions
 

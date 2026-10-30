@@ -27,7 +27,7 @@ class FakeTelegram:
 
 def message(sender, **fields):
     """A Telegram update holding one message from `sender` in a private chat."""
-    return {"update_id": 1, "message": {"from": {"id": sender}, "chat": {"id": sender, "type": "private"}, **fields}}
+    return {"update_id": 1, "message": {"from": {"id": sender}, "chat": {"id": sender, "type": "private"}, "date": 0, **fields}}
 
 
 def test_a_text_from_an_allowed_buyer_creates_a_lead_and_replies_with_the_share_phone_button():
@@ -137,3 +137,13 @@ def test_load_env_skips_comments_and_keeps_a_variable_already_set(tmp_path, monk
 
     assert os.environ["NLLB_TOKEN"] == "123:abc"
     assert os.environ["NLLB_IDS"] == "9"
+
+
+def test_the_buyer_sees_typing_while_the_agent_thinks():
+    agent, _, _ = make_agent(text("Двокімнатна в North коштує 89 900 USD."))
+    telegram = FakeTelegram()
+
+    bot.handle_update(message(BUYER, text="Скільки коштує двокімнатна в North?"), agent, telegram, {BUYER})
+
+    assert [method for method, _ in telegram.calls] == ["sendChatAction", "sendMessage"]
+    assert telegram.calls[0][1] == {"chat_id": BUYER, "action": "typing"}

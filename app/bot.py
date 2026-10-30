@@ -37,14 +37,24 @@ def handle_update(update, agent, telegram, allowed_ids):
         logging.info("Ignored Telegram ID %s: not on the allowed list", sender)
         return
     contact = message.get("contact")
-    if contact and contact.get("user_id") == sender:
-        reply = agent.share_phone(sender, contact["phone_number"])
-    elif "text" in message:
-        reply = agent.reply(sender, message["text"])
-    else:
+    own_contact = contact is not None and contact.get("user_id") == sender
+    if not own_contact and "text" not in message:
         # Stickers, photos, voice, someone else's contact: the agent reads text only.
         return
-    params = {"chat_id": message["chat"]["id"], "text": reply.text}
+    chat_id = message["chat"]["id"]
+    # "typing..." in the chat header until our reply comes, so the buyer knows the message arrived.
+    telegram.call("sendChatAction", chat_id=chat_id, action="typing")
+    started = time.time()
+    if own_contact:
+        reply = agent.share_phone(sender, contact["phone_number"])
+    else:
+        reply = agent.reply(sender, message["text"])
+    # Telegram's "date" is when the buyer sent it: the log shows whether a wait was ours or the network's.
+    logging.info(
+        "Answered %s: received %.0f s after sending, agent took %.1f s",
+        sender, started - message["date"], time.time() - started,
+    )
+    params = {"chat_id": chat_id, "text": reply.text}
     if reply.phone_saved:
         # Telegram keeps a reply keyboard on screen until a message removes it.
         params["reply_markup"] = {"remove_keyboard": True}
