@@ -161,7 +161,7 @@ Estimate 0:15; took about 0:50 (a guess from session length), the extra being th
 - Button label in the buyer's language; the agent's `language` is public for it. The `/manager` menu is Ukrainian only: one menu for every buyer.
 - Ignored without a reply: IDs not on the allowed list, group chats, stickers and other non-text, someone else's contact.
 - Review: a contact sent before any text crashed; now it creates the lead and gets the AI disclosure. A failed `getUpdates` stopped the bot; now it logs and retries in 5 seconds.
-- `load_env` strips quotes: the token in `.env` was quoted, and Telegram answered 404.
+- `.env` values take no quotes: a quoted token made Telegram answer 404; Taras removed the quotes, so `load_env` stays plain.
 - Live: `getMe` and `setMyCommands` work; queued chats from both allowed IDs created leads 1 and 2 in `crm.sqlite` with no send errors.
 - Not done: the GIF needs Taras's screen; due before T8.
 - Not fixed: the agent's rule 7 says "Share phone" in English while the Ukrainian button reads "Поділитися номером"; the model translates.

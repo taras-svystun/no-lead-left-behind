@@ -127,9 +127,9 @@ def test_a_message_in_a_group_gets_no_reply_even_from_an_allowed_id():
     assert claude.requests == []
 
 
-def test_load_env_strips_quotes_skips_comments_and_keeps_a_variable_already_set(tmp_path, monkeypatch):
+def test_load_env_skips_comments_and_keeps_a_variable_already_set(tmp_path, monkeypatch):
     env = tmp_path / ".env"
-    env.write_text('# a comment\nNLLB_TOKEN="123:abc"\nNLLB_IDS=1,2\n')
+    env.write_text('# a comment\nNLLB_TOKEN=123:abc\nNLLB_IDS=1,2\n')
     monkeypatch.delenv("NLLB_TOKEN", raising=False)
     monkeypatch.setenv("NLLB_IDS", "9")
 
