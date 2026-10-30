@@ -30,3 +30,4 @@ No estimate in the plan. Findings and Taras's calls:
 - Applied: test cases check actions and data, not wording; the LLM judge for wording stays as polish 10.
 - Taras's edit: critic prompt no longer weighs the time budget or says that zero findings is fine.
 - Critic prompt: "nothing game-changing" allowed again; Risk line cut (budget no longer weighed); Bloat merged into Simplify.
+- CLAUDE.md: every session ends with the next stage or ticket and its exact prompt from WORKFLOW.md.
