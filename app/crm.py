@@ -22,6 +22,14 @@ CREATE TABLE IF NOT EXISTS leads (
 )
 """
 
+# Calls already processed, so a webhook Ringostat sends again is skipped.
+CALLS_SCHEMA = """
+CREATE TABLE IF NOT EXISTS processed_calls (
+    call_id TEXT PRIMARY KEY,
+    lead_id INTEGER NOT NULL
+)
+"""
+
 # Fields the agent and the after-call webhook may fill; status and reason go
 # through set_handoff. Python checks the field names (they go into the SQL),
 # the table's CHECK checks the values.
@@ -33,6 +41,7 @@ def connect(path):
     db = sqlite3.connect(path)
     db.row_factory = sqlite3.Row
     db.execute(SCHEMA)
+    db.execute(CALLS_SCHEMA)
     return db
 
 
@@ -78,6 +87,17 @@ def set_handoff(db, lead_id, reason):
     db.execute(
         "UPDATE leads SET status = 'handoff', handoff_reason = ? WHERE id = ?", (reason, lead_id)
     )
+    db.commit()
+
+
+def call_processed(db, call_id):
+    """True if this call ID was already processed."""
+    return db.execute("SELECT 1 FROM processed_calls WHERE call_id = ?", (call_id,)).fetchone() is not None
+
+
+def mark_call_processed(db, call_id, lead_id):
+    """Remember a processed call; the PRIMARY KEY rejects the same call ID twice."""
+    db.execute("INSERT INTO processed_calls (call_id, lead_id) VALUES (?, ?)", (call_id, lead_id))
     db.commit()
 
 

@@ -197,3 +197,22 @@ Took about 0:30 against 0:10: the code review found a wrong note after "/start",
 - Not fixed, found live: the model once called `hand_off` with no `reason` ("Привіт, є студії?", old prompt) and `_ask_ai` crashed on `KeyError`; `required` in a tool schema is not enforced without `strict`.
 - T5b added: `"strict": True` on the tools, not a `.get("reason", "unknown")` fallback: the fallback hides one symptom and writes a made-up reason into the CRM (Taras's call).
 - P18 added: a correct handoff is not a right one; measure wrong and missed handoffs on messages labelled in advance, judged by code, 10 runs each, because one live failure in 4 runs is a rate, not a fluke.
+
+## 2026-10-30: T6 after-call webhook
+
+Took about 0:25 against 0:50 (agent time; the clock was not tracked closely).
+- `app/redact.py`: emails first (their digits must not become a phone), then phones as any run of 10+ digits with spaces, dashes or brackets, so a price like "89 900" stays.
+- Known names match by stem plus up to 3 letters (Олена, Олено, Олени; Андрій, Андрію), whole words only; stems under 3 letters match as written (Taras's call). `employee_fio` is split, so "Андрій" alone is caught.
+- `app/calls.py`: one Claude call with structured output (JSON schema), not a forced tool: Haiku 5.5 rejects forced `tool_choice`.
+- A call field replaces the chat's value only when the call states it; a second call appends its summary on a new line (Taras's calls).
+- A call is marked processed only after its lead is updated, so a failed AI call is redone when Ringostat resends. `HTTPServer`, not `ThreadingHTTPServer`: one request at a time, so a resend mid-processing is skipped after it.
+- Answers: 400 for a payload we cannot use (bad JSON, missing keys, hidden number, transcript not found), because a resend would fail the same way; 500 for our failures, so Ringostat resends.
+- Simulated: `transcript_url` resolves to the file of that name in `tests/fixtures/`; only the name is used, so a payload cannot read other files.
+- Live, Haiku: `curl` of the fixture filled budget 100000, instalments, North on the lead, kept rooms 2, and a second `curl` was skipped with one API call in total (≈0.0002 USD, estimated). The summary had no personal data.
+- Found live: the API rejects `enum` next to a type list (`["string", "null"]`); a choice or null is an `anyOf`. The fake client could not catch it.
+- Spec: the AI also fills `complex` on a call; the spec line now says so.
+- Review (code-review, two axes): a missing transcript returned 500 and would be resent forever, now 400; an unenforced `REFERENCES` (SQLite needs `PRAGMA foreign_keys`) removed; tests added for "newest wins" and the 3-letter limit.
+- Not fixed: the lead update and the "processed" mark are two commits, so a crash between them appends a summary twice on resend. Rare; one transaction would close it.
+- Not fixed: phone redaction over-reaches: "+380000000001 2 рази" loses the "2", and "100 000 - 120 000" (12 digits joined by a dash) becomes [PHONE]. Over-redaction is the safe side.
+- Not fixed: a lead name saved in Latin ("Olena") does not match "Олена" in a transcript. P8 territory.
+- Not fixed: `calls.py` imports `ROOT`, `CRM_FILE` and `load_env` from `bot.py`; a shared config module waits until a third user needs them.
