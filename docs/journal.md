@@ -105,3 +105,8 @@ No estimate in the plan; took about 0:15.
 Taras missed that T1 awaited his approval: the request was a status line in the plan, and approving meant reading a client document. Now a ticket that needs him gets ⏳ and a review card in chat (up to 5 decisions, one line each); a session blocked by a ⏳ ticket shows the card and stops. Rejected: a summary atop `spec.md`: it would mix the client's document with notes for Taras.
 - P14 added, chat redaction: D6 promised it in polish, but no P item held it.
 - Case 6 check changed from "no total below 89,900" to "every USD total is a price list row": the old check failed a fair answer that offers River's cheaper 2-room flat (found in T2).
+
+## 2026-10-30: Day and night handoff message; one word "agent"
+
+- T1 review card: Taras accepted 4 of 5 decisions. The 15-minute promise broke at night (discovery: chats after 19:00 wait until morning), so code picks the handoff message by Kyiv hour: 15 minutes from 9:00 to 19:00, else "by 12:00" (D8; T4 +0:10, core ~5:00). Kept in core, not polish: it is one `if`, and the model need not know the time.
+- "Agent" stays the one word, client documents included (D20): "chatbot" for clients and "agent" elsewhere would be two names for one thing.

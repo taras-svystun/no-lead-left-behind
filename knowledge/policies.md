@@ -2,6 +2,10 @@
 
 Simulated: Client A and its rules are fictional.
 
+## Managers
+
+- Managers answer chats daily from 9:00 to 19:00.
+
 ## Viewings
 
 - A manager arranges every viewing, daily from 10:00 to 19:00.

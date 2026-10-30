@@ -12,7 +12,7 @@ The whole flow as one story: `docs/STORY.md`.
 - **Lead**: a record in the CRM for one buyer, with their contact and what they want. One buyer, one lead: a call from the same phone lands on the same lead.
 - **CRM**: the client's system that holds all leads, the box of cards.
 - **Simulated CRM**: the core's stand-in for the client's CRM, one SQLite table; Bitrix24 replaces it in polish.
-- **Agent**: the one Claude-based assistant that answers buyers in Telegram.
+- **Agent**: the one Claude-based assistant that answers buyers in Telegram. The one word for it everywhere, client documents included (D20).
 - **Telegram ID**: the fixed number Telegram gives each account; how the agent recognises a buyer in chat.
 - **Call ID**: the telephony system's id for one call; a second webhook with the same id is a repeat and is skipped.
 - **Duplicate lead**: two leads for one buyer, made when a call's phone matches no existing lead.

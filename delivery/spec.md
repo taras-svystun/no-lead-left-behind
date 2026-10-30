@@ -24,13 +24,14 @@ Every buyer gets an answer within a minute, at any hour, and every conversation 
 ## Scope
 
 In: Telegram chat agent; leads in the CRM; handoff to managers; a summary of each phone call on its lead.
+
 Out: booking or payment by the agent; discounts; completion dates; outbound messages; other messengers.
 
 ## How it works
 
 **Telegram chat.** The agent says first that it is an AI assistant and never poses as a human. It answers in the buyer's language, from the price list and the policies only. It asks for budget, rooms, timing, payment method and phone. For the phone it shows a "Share phone" button twice at most: with its first reply and with the handoff message. The button disappears once the phone is shared, and the agent never insists. Every chat creates a lead with its first message, so a buyer who stops after two messages is still a lead; the agent adds what it learns as it goes.
 
-**Handoff.** The agent passes the buyer to a manager when the buyer asks for a person or sends `/manager` (any time), wants a viewing or a booking, asks what the price list and policies do not answer, or complains. The lead gets status `handoff` and the reason; the buyer is told a manager will write within 15 minutes. After that the agent only repeats that a manager is on it.
+**Handoff.** The agent passes the buyer to a manager when the buyer asks for a person or sends `/manager` (any time), wants a viewing or a booking, asks what the price list and policies do not answer, or complains. The lead gets status `handoff` and the reason; the buyer is told a manager will write within 15 minutes, or by 12:00 if they write between 19:00 and 9:00. After that the agent only repeats that a manager is on it.
 
 **After a phone call.** The telephony system sends the caller's phone and a link to the call's transcript. We skip a call we have already processed, because the telephony system resends a webhook it thinks was lost. We find the lead by phone, or create one. We remove names, phone numbers and emails from the transcript, then the AI writes a short summary and fills budget, rooms, timing and payment method on the lead.
 
