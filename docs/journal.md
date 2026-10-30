@@ -269,3 +269,14 @@ Took about 1:10 against 0:30: the 30 runs found a new fault, diagnosed and fixed
 - Not done: Sonnet; no case needed it once the cause was found. The full ×30 after the fix (~0.25 USD) waits until a change could move it.
 - TDD slip again: the tally and transcript tests came after the code.
 - API spent in T7a: about 0.44 USD.
+
+## 2026-10-30: T8 README case study (waits on the GIF)
+
+Took about 0:25 against 0:45, the GIF not yet recorded.
+- README follows the ticket: problem, before/after, flow, demo, week by week, evals, one tuning loop, 10x, n8n, limits, how it was built, run commands.
+- Flow as a Mermaid diagram, not an image: GitHub renders it, and it diffs as text.
+- Before/after: "before" is the simulated discovery; "after" says which numbers are measured (reply time, from the T5 live log) and which are pilot targets (80% of leads with budget and rooms).
+- Pilot waves start with nights and weekends: most value (those chats wait until morning), least risk (no manager is answering then).
+- 10x cost is an estimate: case 2's 0.0026 USD per full qualification ×4,000 ≈ 12 USD a month, so cost is not what breaks.
+- Not done: `docs/demo.gif` needs Taras's screen; the frame notes are the recording script, so the GIF must follow them. No charts: one table carries 10 cases better.
+- code-review not run: the step changes no code; every number was checked against `evals/results.md` and this journal.
