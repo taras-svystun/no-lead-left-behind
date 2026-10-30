@@ -8,7 +8,7 @@ A public showcase of one AI-agent deployment for a fictional client, run end to 
 - `delivery/`: the client-facing documents (spec, test cases, ...). The spec and test cases are also the build spec.
 - `GLOSSARY.md`: the project's words. Use them in code, docs and commits. Matt Pocock skills that ask for `CONTEXT.md` use this file.
 - `docs/journal.md`: what each finished step did and why, and the critic's findings.
-- `docs/adr/`: decisions that are hard to undo. Read before changing the CRM contract, the personal data removal, or the eval judge.
+- `docs/adr/`: decisions that are hard to undo; none written yet (P7), so until then the decisions in `docs/PLAN.md`. Read before changing the CRM contract, the personal data removal, or the eval judge.
 - `docs/agents/issue-tracker.md`: where Matt Pocock skills find the spec and tickets.
 
 ## Rules of this project

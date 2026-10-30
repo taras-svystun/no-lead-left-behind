@@ -6,15 +6,13 @@ import os
 import time
 import urllib.request
 from datetime import datetime
-from pathlib import Path
 
 import anthropic
 
 from app import crm
 from app.agent import KYIV, Agent
+from app.config import CRM_FILE, load_env
 
-ROOT = Path(__file__).parent.parent
-CRM_FILE = ROOT / "crm.sqlite"
 # Telegram holds each getUpdates request open up to this many seconds until a message comes (long polling).
 POLL_SECONDS = 30
 # The command menu next to the text field; /manager works at any time (D8).
@@ -81,17 +79,9 @@ class Telegram:
             return json.load(response)["result"]
 
 
-def load_env(path):
-    """Put KEY=VALUE lines from .env into os.environ; a variable already set wins."""
-    for line in path.read_text().splitlines():
-        if "=" in line and not line.startswith("#"):
-            key, value = line.split("=", 1)
-            os.environ.setdefault(key.strip(), value.strip())
-
-
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    load_env(ROOT / ".env")
+    load_env()
     allowed_ids = {int(value) for value in os.environ["TELEGRAM_ALLOWED_IDS"].split(",") if value.strip()}
     telegram = Telegram(os.environ["TELEGRAM_BOT_TOKEN"])
     agent = Agent(crm.connect(CRM_FILE), anthropic.Anthropic(), now=lambda: datetime.now(KYIV))

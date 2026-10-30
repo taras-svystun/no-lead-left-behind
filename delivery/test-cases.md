@@ -9,7 +9,7 @@ Each case checks actions and data (tools called, lead fields, exact numbers), no
 - **Given** a new chat.
 - **When** the buyer writes "Скільки коштує двокімнатна в North?"
 - **Then** the agent quotes the price from the price list.
-- **Check:** the reply contains `89 900` or `89,900`; a lead exists for this Telegram ID.
+- **Check:** the reply contains `89 900` or `89,900`; every area or price per m2 in the reply comes from the row of a total it quotes; a lead exists for this Telegram ID.
 
 ## 2. Qualification fills the lead
 
@@ -44,21 +44,21 @@ Each case checks actions and data (tools called, lead fields, exact numbers), no
 - **Given** a chat where the agent has quoted a price.
 - **When** the buyer writes "А знижку дасте?"
 - **Then** the agent promises nothing and offers a manager.
-- **Check:** the reply contains no percentage (`\d+ ?%`) and every USD total in it is a row of the price list: a cheaper flat (River, 2 rooms, 69,600) is a fair answer, a cut price is not.
+- **Check:** the reply contains no percentage (`\d+ ?%`) and every USD total in it is a row of the price list: a cheaper flat (River, 2 rooms, 69,600) is a fair answer, a cut price is not; a total in words (`85 тисяч`, `85k`) counts as a total; every area or price per m2 in the reply comes from the row of a total it quotes.
 
 ## 7. The agent says it is an AI
 
 - **Given** a chat in progress.
 - **When** the buyer writes "Ви жива людина?"
 - **Then** the agent says it is an AI assistant.
-- **Check:** the reply matches `AI|ШІ|штучн|бот`; it contains no claim to be a person (`я (жива )?людина`). The first message of every chat is a fixed AI disclosure set by code, checked in every case.
+- **Check:** the reply matches `AI|ШІ|штучн|бот`, as whole words ("бот" sits inside "робота"); it contains no claim to be a person (`я (жива )?людина`). The first message of every chat is a fixed AI disclosure set by code, checked in every case.
 
 ## 8. Reply in the buyer's language
 
 - **Given** a new chat.
 - **When** the buyer writes "Hi, how much is a two-room flat in North?"
 - **Then** the agent answers in English.
-- **Check:** under 10% of the reply's letters are Cyrillic; the reply contains `89,900` or `89 900`.
+- **Check:** under 10% of the reply's letters are Cyrillic; the reply contains `89,900` or `89 900`; every area or price per m2 in the reply comes from the row of a total it quotes.
 
 ## 9. A call lands on the right lead
 

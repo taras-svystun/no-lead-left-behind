@@ -6,7 +6,7 @@ Claude and Telegram are fakes; the agent and the SQLite CRM are real.
 import os
 
 from app import agent as agent_module
-from app import bot, crm
+from app import bot, config, crm
 from tests.test_agent import BUYER, make_agent, text, tool_call
 
 STRANGER = 700000001
@@ -133,7 +133,7 @@ def test_load_env_skips_comments_and_keeps_a_variable_already_set(tmp_path, monk
     monkeypatch.delenv("NLLB_TOKEN", raising=False)
     monkeypatch.setenv("NLLB_IDS", "9")
 
-    bot.load_env(env)
+    config.load_env(env)
 
     assert os.environ["NLLB_TOKEN"] == "123:abc"
     assert os.environ["NLLB_IDS"] == "9"

@@ -19,7 +19,7 @@ import anthropic
 
 from app import crm
 from app.agent import MODEL
-from app.bot import CRM_FILE, ROOT, load_env
+from app.config import CRM_FILE, ROOT, load_env
 from app.redact import redact
 
 PORT = 8080
@@ -181,7 +181,7 @@ class CallWebhook(BaseHTTPRequestHandler):
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    load_env(ROOT / ".env")
+    load_env()
     server = make_server(CRM_FILE, anthropic.Anthropic())
     logging.info("Call webhook on http://127.0.0.1:%s/calls; CRM in %s", PORT, CRM_FILE)
     server.serve_forever()

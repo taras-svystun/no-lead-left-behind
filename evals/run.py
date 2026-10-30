@@ -17,7 +17,7 @@ import anthropic
 
 from app import agent, calls, crm
 from app.agent import DISCLOSURE, HANDOFF, KNOWLEDGE, KYIV
-from app.bot import ROOT, load_env
+from app.config import ROOT, load_env
 
 # USD per million tokens (D2). Thinking tokens are billed as output.
 PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)}
@@ -358,7 +358,7 @@ def main():
     parser.add_argument("--model", default=agent.MODEL, choices=sorted(PRICES))
     parser.add_argument("--case", type=int, action="append", choices=sorted(CASES), help="run only these cases")
     args = parser.parse_args()
-    load_env(ROOT / ".env")
+    load_env()
     # The agent and the call webhook read their module's MODEL on each call.
     agent.MODEL = calls.MODEL = args.model
     client = anthropic.Anthropic()

@@ -244,3 +244,12 @@ Took about 0:50 against 0:40 (agent time): a failed case 2, its diagnosis, and t
 - Review, not fixed: the nullable lead-field schema is in both `agent.py` and `calls.py`; one shared schema in `crm` waits for a third user. `run.py` swaps `agent.MODEL` and `calls.MODEL` as globals instead of passing the model in. `test_evals.py` imports helpers from `test_agent.py`, as `test_calls.py` already does.
 - Not fixed: one run per model is a sample, not a rate (P18). Cases 1 and 8 would accept "189 900". "я не бот, я менеджер" would pass case 7's AI check.
 - TDD slip: the row and "тисяч" checks were written before their tests, so those tests never ran red.
+
+## 2026-10-30: Critic on the build (T5a-T7)
+
+Took about 0:30. Taras rejected freezing core: quality and learning come before the time limit.
+- T7a added: `evals/strict_probe.py` makes T7's "9 of 10 vs 0 of 10" rerunnable, and `--runs 30` on Haiku turns one 10/10 into a rate; Sonnet only on a case that fails, after Taras approves (a blind Sonnet run decides nothing: Haiku is already chosen).
+- T8 gets a real tuning loop (T7's case 2); P1 shrinks to the manager-feedback trigger and the change note.
+- `delivery/test-cases.md` now states what `evals/run.py` checks beyond it: the row check (cases 1, 6, 8), totals in words (case 6), whole-word "бот" (case 7). One contract, not two.
+- `app/config.py` holds `ROOT`, `CRM_FILE` and `load_env`: `evals/run.py` was the third user, so the call webhook and evals no longer import the Telegram bot.
+- `CLAUDE.md` says no ADR exists yet (P7); GLOSSARY counts no P items, so it cannot go stale.
