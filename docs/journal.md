@@ -47,3 +47,13 @@ No estimate in the plan for the grill. Decisions are in `docs/PLAN.md`, "Grill d
 - Story moved from the glossary to `docs/STORY.md`: Taras needed it once; every session reads the glossary.
 - Redaction names: those on the lead found by phone, not only the payload's; Ringostat's payload name field is unconfirmed.
 - Polish 8: local name detection for redaction; polish 13: local chat model, only as an eval comparison. Urgent: confirm Ringostat's name field.
+
+## 2026-10-30: Spec, test cases and tickets (stage 2)
+
+Estimate 1:20 for spec and test cases; took about 0:30 of writing after the grill.
+
+- Every chat creates its lead in code on the first message, not by the agent: a skipped tool call cannot lose a lead.
+- Fixed price row for the cases: North, 2 rooms, 62 m2, 1,450 USD/m2, 89,900 USD.
+- Phone numbers in examples use +380000000001: no real number in a public repo.
+- Case 7 checks wording by pattern (AI|ШІ|штучн|бот): the disclosure matters enough to break the "actions, not wording" rule once.
+- Tickets 1-8 in `docs/PLAN.md`, total ~4:45; ticket 6 waits on the Ringostat name check.
