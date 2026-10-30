@@ -177,3 +177,5 @@ Estimate 0:15; took about 0:50 (a guess from session length), the extra being th
 - Second live chat: the "received 58 s after sending" in the log is the Mac's clock, 57 s fast (`sntp time.apple.com`: -56.6 s); the real wait is about 1 s to arrive plus 3-4 s for the agent. No slow path found in the bot.
 - The first account "did not answer": its lead is in `handoff`, so the bot repeated the handoff text with no AI call, as D8 says (log: "agent took 0.0 s").
 - For T7: the agent quoted the right River studio price with North's area (28 m2, not 26). Price checks alone miss it; the eval should check every number in a reply against one price list row.
+- Reset for testing is a shell command, not a `/reset` in the bot: no code, and no buyer can ever delete a lead. Stop the bot, `rm -f crm.sqlite`, start it; chats live in memory, so the restart clears them too.
+- A buyer back after a closed handoff: P17 (Taras's call: polish).
