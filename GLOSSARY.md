@@ -6,6 +6,7 @@ A public showcase of one AI-agent deployment for a fictional residential develop
 - **Buyer**: a person who writes in Telegram or calls about buying a flat.
 - **Manager**: the client's human sales person, who takes over from the agent.
 - **Lead**: a record in the CRM for one buyer, with their contact and what they want.
+- **Simulated CRM**: the core's stand-in for the client's CRM, one SQLite table; Bitrix24 replaces it in polish.
 - **Agent**: the one Claude-based assistant that answers buyers in Telegram.
 - **Tool**: an action the agent can call: price lookup, create lead, hand off.
 - **Handoff**: the agent stops and passes the buyer to a manager.
@@ -13,7 +14,7 @@ A public showcase of one AI-agent deployment for a fictional residential develop
 - **After-call webhook**: the message the telephony system sends to us after each phone call ends.
 - **Personal data removal (redaction)**: replacing names, phone numbers and similar data with placeholders before text leaves our system.
 - **Test case**: one given / when / then scenario that defines good behaviour. There are 10; the eval runner runs them.
-- **Eval runner**: the script that runs the 10 test cases against the agent and reports pass/fail, quality and cost.
+- **Eval runner**: the script that runs the 10 test cases against the agent and reports pass/fail and cost. Judged by code in core; an LLM judge for answer quality comes in polish.
 - **Baseline**: how the client's process performs before the deployment, to compare the pilot against.
 
 ## Build process
