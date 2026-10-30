@@ -111,3 +111,16 @@ Taras missed that T1 awaited his approval: the request was a status line in the 
 - T1 review card: Taras accepted 4 of 5 decisions. The 15-minute promise broke at night (discovery: chats after 19:00 wait until morning), so code picks the handoff message by Kyiv hour: 15 minutes from 9:00 to 19:00, else "by 12:00" (D8; T4 +0:10, core ~5:00). Kept in core, not polish: it is one `if`, and the model need not know the time.
 - "Agent" stays the one word, client documents included (D20): "chatbot" for clients and "agent" elsewhere would be two names for one thing.
 - Polish reordered: chat redaction moved next to name detection (P9); Bitrix24, price tool, LLM judge, product notes, local model are now P10-P14. Entries above keep the old numbers.
+
+## 2026-10-30: T3 simulated CRM
+
+Estimate 0:15; took about 0:30 (a guess from session length), the extra being the code review and its fixes.
+
+- `app/crm.py`: one `leads` table with the spec's fields; functions take the connection, so tests use `:memory:` and the bot a file.
+- Field names are checked in Python (they go into the SQL), values by the table's CHECK: one rule, no second list of allowed values.
+- `create_lead` takes no phone: T6 creates a call lead, then `update_lead(phone=...)`; one write path normalises the phone.
+- Review: a foreign caller crashed `find_by_phone`, so any number is now kept as E.164 and only text with no digits raises; T6 must catch that for a withheld number.
+- Review: `update_lead` with no fields raised an SQL error; now a clear `ValueError`.
+- For T6: the call ID store is not in T3; T6 adds its own `processed_calls` table, not a column on leads.
+- For T5/T7: the end-to-end test CLAUDE.md asks for comes with the first full flow; T3 has unit tests only.
+- Not fixed: updating a lead id that does not exist does nothing silently; ids only come from `create_lead`.
