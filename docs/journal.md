@@ -141,5 +141,12 @@ Estimate 0:40; took about 1:00 (a guess from session length), the extra being th
 - Review: text written next to a save_lead call was lost, and an empty follow-up handed off by mistake; now every text of the turn reaches the buyer.
 - Review, prompt: completion dates named under "unknown" (case 5); "are you human?" is not a manager request (case 7); the agent asks once for the phone (spec).
 - Not fixed: the reason and payment values sit in three places (CRM CHECK, tool schema, prompt), one per reader; `_save_lead` catches `sqlite3.IntegrityError`, so P10 must map Bitrix24 errors there.
-- Not verified: the live case 1 test (`tests/test_agent_live.py`) is skipped without `ANTHROPIC_API_KEY`; nor whether Haiku 5.5 accepts `effort: low`. T4 stays ⏳ until it runs.
+- Live case 1: 0.00055 USD per chat; Haiku 5.5 accepts `effort: low`. The first run handed off instead of quoting the price, then 26 runs in a row passed; the cause is unknown, so no fix. The code-forced handoff now logs its own warning, so T7 shows which path fires.
 - For T5: keep the "Share phone" keyboard on screen until the phone is shared, since the agent asks late; Telegram's `language_code` could pick the disclosure language after `/start`, which is Ukrainian today.
+
+## 2026-10-30: One list of critic runs
+
+- The critic ran after T4, T7 and T8 per WORKFLOW, but the implementer took "what next" from PLAN, which had no such list, and sent Taras to T5. Now each ticket that gets a critic ends with "Then: critic" in PLAN; WORKFLOW points there and holds no ticket numbers.
+- Critic after T5, not T4 (Taras's call): T4 alone is a module with no front door; after T5 the walking skeleton is whole, and the critic still reads T4's journal lines.
+- Stage 5 no longer runs code-review again: `implement` already reviews every ticket against the whole repo.
+- T5 gets a whitelist, `TELEGRAM_ALLOWED_IDS` in `.env`: the bot is public, anyone else would spend the API budget. IDs stay out of the repo.

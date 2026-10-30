@@ -181,6 +181,8 @@ class Agent:
                 # after a handoff the chat never goes back to the model.
                 return self._hand_off(telegram_id, lead_id, handoff.input["reason"])
             chat.append({"role": "user", "content": results})
+        # Logged apart from the model's own hand_off, so the evals show which one fired.
+        logging.warning("No answer from the AI for lead %s: handing off as unknown", lead_id)
         return self._hand_off(telegram_id, lead_id, "unknown")
 
     def _hand_off(self, telegram_id, lead_id, reason):

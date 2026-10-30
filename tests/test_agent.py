@@ -249,3 +249,11 @@ def test_start_command_gets_the_disclosure_without_calling_the_ai():
     assert reply.ask_phone is True
     assert crm.find_by_telegram_id(db, BUYER) is not None
     assert client.requests == []
+
+
+def test_a_handoff_forced_by_code_is_logged_apart_from_the_models_own(caplog):
+    bot, _, _ = make_agent(text(""))
+
+    bot.reply(BUYER, "Коли здача будинку в North?")
+
+    assert "No answer from the AI" in caplog.text
