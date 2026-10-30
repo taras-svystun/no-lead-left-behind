@@ -150,3 +150,18 @@ Estimate 0:40; took about 1:00 (a guess from session length), the extra being th
 - Critic after T5, not T4 (Taras's call): T4 alone is a module with no front door; after T5 the walking skeleton is whole, and the critic still reads T4's journal lines.
 - Stage 5 no longer runs code-review again: `implement` already reviews every ticket against the whole repo.
 - T5 gets a whitelist, `TELEGRAM_ALLOWED_IDS` in `.env`: the bot is public, anyone else would spend the API budget. IDs stay out of the repo.
+
+## 2026-10-30: T5 Telegram bot
+
+Estimate 0:15; took about 0:50 (a guess from session length), the extra being the review fixes and a quoted token in `.env`.
+
+- Telegram over stdlib `urllib`, not a library: three API methods, no dependency, every line explainable.
+- Tests at one seam, `handle_update`, with fake Claude and fake Telegram and the real agent and CRM: the end-to-end test CLAUDE.md asks for. The HTTP part is checked live (Taras's call).
+- The "Share phone" keyboard stays on screen until a phone reaches the lead, by button or typed: the agent returns `phone_saved`, the bot removes the keyboard.
+- Button label in the buyer's language; the agent's `language` is public for it. The `/manager` menu is Ukrainian only: one menu for every buyer.
+- Ignored without a reply: IDs not on the allowed list, group chats, stickers and other non-text, someone else's contact.
+- Review: a contact sent before any text crashed; now it creates the lead and gets the AI disclosure. A failed `getUpdates` stopped the bot; now it logs and retries in 5 seconds.
+- `load_env` strips quotes: the token in `.env` was quoted, and Telegram answered 404.
+- Live: `getMe` and `setMyCommands` work; queued chats from both allowed IDs created leads 1 and 2 in `crm.sqlite` with no send errors.
+- Not done: the GIF needs Taras's screen; due before T8.
+- Not fixed: the agent's rule 7 says "Share phone" in English while the Ukrainian button reads "Поділитися номером"; the model translates.

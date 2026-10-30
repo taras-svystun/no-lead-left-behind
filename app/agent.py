@@ -97,6 +97,7 @@ PHONE_NOTE = "[Note from the system, not the buyer: the buyer shared their phone
 class Reply:
     text: str
     ask_phone: bool = False  # show the "Share phone" button with this reply (D10)
+    phone_saved: bool = False  # a phone reached the lead this turn: remove the button
 
 
 class Agent:
@@ -113,33 +114,36 @@ class Agent:
         self.languages = {}
 
     def reply(self, telegram_id, text):
+        if not text.startswith("/"):
+            self.languages.setdefault(telegram_id, language_of(text))
+        return self._turn(telegram_id, text)
+
+    def share_phone(self, telegram_id, phone):
+        """Save a phone sent with the button; the AI only hears that it was shared."""
+        return self._turn(telegram_id, PHONE_NOTE, phone)
+
+    def _turn(self, telegram_id, text, phone=None):
         # Every chat becomes a lead on its first message, before any AI call.
+        # A contact from the attachment menu can be the first message too.
         lead = crm.find_by_telegram_id(self.db, telegram_id)
         first_message = lead is None
         if first_message:
             crm.create_lead(self.db, "telegram", telegram_id)
             lead = crm.find_by_telegram_id(self.db, telegram_id)
-        if not text.startswith("/"):
-            self.languages.setdefault(telegram_id, language_of(text))
+        if phone:
+            crm.update_lead(self.db, lead["id"], phone=phone)
 
         answer = self._answer(telegram_id, lead, text)
 
         # The button shows twice at most: with the first reply and with the handoff message.
+        # It goes once a phone is on the lead, shared with the button or typed.
         after = crm.find_by_telegram_id(self.db, telegram_id)
         handed_off_now = lead["status"] == "new" and after["status"] == "handoff"
         ask_phone = after["phone"] is None and (first_message or handed_off_now)
+        phone_saved = lead["phone"] is None and after["phone"] is not None
         if first_message:
-            answer = DISCLOSURE[self._language(telegram_id)] + "\n\n" + answer
-        return Reply(answer, ask_phone)
-
-    def share_phone(self, telegram_id, phone):
-        """Save a phone sent with the button; the AI only hears that it was shared.
-
-        The lead exists: the button only comes with a reply.
-        """
-        lead = crm.find_by_telegram_id(self.db, telegram_id)
-        crm.update_lead(self.db, lead["id"], phone=phone)
-        return Reply(self._answer(telegram_id, lead, PHONE_NOTE))
+            answer = DISCLOSURE[self.language(telegram_id)] + "\n\n" + answer
+        return Reply(answer, ask_phone, phone_saved)
 
     def _answer(self, telegram_id, lead, text):
         if lead["status"] == "handoff":
@@ -149,7 +153,7 @@ class Agent:
         if command == "/manager":
             return self._hand_off(telegram_id, lead["id"], "person")
         if command == "/start":
-            return START[self._language(telegram_id)]
+            return START[self.language(telegram_id)]
         return self._ask_ai(telegram_id, lead["id"], text)
 
     def _ask_ai(self, telegram_id, lead_id, text):
@@ -200,9 +204,9 @@ class Agent:
     def _handoff_text(self, telegram_id):
         hour = self.now().astimezone(KYIV).hour
         time_of_day = "day" if 9 <= hour < 19 else "night"
-        return HANDOFF[self._language(telegram_id)][time_of_day]
+        return HANDOFF[self.language(telegram_id)][time_of_day]
 
-    def _language(self, telegram_id):
+    def language(self, telegram_id):
         # Ukrainian until the buyer writes words: "/manager" alone says nothing.
         return self.languages.get(telegram_id, "uk")
 
