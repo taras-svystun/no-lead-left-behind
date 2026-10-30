@@ -60,7 +60,7 @@ The take-home task for this role is "a one-page spec, 10 test cases, check a sam
 
 ## Hard constraints
 
-- **Time.** Core: 2-4 hours, 6 at most, then apply. Polish: after applying, in the order of `docs/PLAN.md`.
+- **Time.** Core: about 10 hours at most, then apply. Going past the first 2-4 hour estimate is fine: what Taras learns while building is worth the time. Polish: after applying, in the order of `docs/PLAN.md`.
 - **Money.** Free tiers, open source, local tools only. About 3 USD of Anthropic API credit in total. If something costs money: stop, name the free alternative and what it costs us.
 - **Public repo.** No real personal data, no secrets, no real company names, no mention of the employer.
 - **No live bot.** The Telegram demo is a screen recording (GIF) with a frame-by-frame explanation, not a bot that must stay online.

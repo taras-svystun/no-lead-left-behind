@@ -6,7 +6,7 @@ Show how Taras runs one AI-agent deployment end to end, smallest version that so
 
 ## Phases
 
-- **Core** (2-4 hours, 6 at most): tickets T1-T8, small but finished; then apply.
+- **Core** (about 10 hours at most): tickets T1-T8, small but finished; then apply.
 - **Polish**: after applying, items P1-P17 in order, as time allows. A P item becomes a ticket when its turn comes.
 
 IDs are unique across the project: T for tickets, P for polish items, D for decisions. Test cases keep their own numbers ("case 1"), from `delivery/test-cases.md`.

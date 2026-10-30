@@ -34,7 +34,7 @@ The whole flow as one story: `docs/STORY.md`.
 
 ## Build process
 
-- **Core**: the part built first (2-4 hours), enough to apply with: tickets T1-T8.
+- **Core**: the part built first (about 10 hours at most), enough to apply with: tickets T1-T8.
 - **Polish**: everything after applying: items P1-P17 in `docs/PLAN.md`.
 - **Delivery documents**: the client-facing documents in `delivery/`.
 - **Planner / implementer / critic**: the three session roles in `docs/WORKFLOW.md`. One AI, separate fresh sessions.

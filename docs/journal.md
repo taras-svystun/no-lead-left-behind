@@ -185,3 +185,4 @@ Estimate 0:15; took about 0:50 (a guess from session length), the extra being th
 Took about 0:15. Taras rejected the time finding: the learning is worth more than the overrun, and 2-4 more hours are free.
 - GIF moved from T5's check to T8: T5 was ✅ with an open check, and a GIF of a raw flow would be redone anyway.
 - T5a added: the model gets the disclosure as a system note on the first turn, so it stops greeting twice (live, 1 of 3 first replies did).
+- Core limit raised from "2-4 hours, 6 at most" to "about 10 hours at most" in BRIEF, PLAN and GLOSSARY: ~6 hours are spent, T6-T8 remain, and Taras values what he learns over the first estimate (Taras's call).
