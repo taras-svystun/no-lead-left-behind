@@ -46,3 +46,4 @@ No estimate in the plan for the grill. Decisions are in `docs/PLAN.md`, "Grill d
 - 10 test cases: 8 for the agent, 2 for the after-call webhook (lead match, redaction).
 - Story moved from the glossary to `docs/STORY.md`: Taras needed it once; every session reads the glossary.
 - Redaction names: those on the lead found by phone, not only the payload's; Ringostat's payload name field is unconfirmed.
+- Polish 8: local name detection for redaction; polish 13: local chat model, only as an eval comparison. Urgent: confirm Ringostat's name field.

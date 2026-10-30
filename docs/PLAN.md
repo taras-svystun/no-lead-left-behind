@@ -24,6 +24,10 @@ Show how Taras runs one AI-agent deployment end to end, smallest version that so
 
 Decided: leads in a simulated CRM (SQLite), not Bitrix24 (Python stdlib, no server; Bitrix24 waits for polish). Price list in the system prompt, not a tool: about 12 rows fit, and the agent cannot skip a lookup and invent a price. Evals judged by code; no LLM judge in core. Each test case checks actions and data (tool calls, lead rows, exact prices), not wording: wording varies per run. No live bot: GIF.
 
+## Urgent (before stage 2)
+
+- Does Ringostat's "call processed by AI" webhook carry the caller's name? Run in a new session: `/mattpocock-skills:research Does Ringostat's "call processed by AI" webhook (and the after-call event) carry the caller's or contact's name? Check help.ringostat.com and its webhook parameter sheet; list every name-like field with its source URL; say plainly what cannot be confirmed.` It decides the fields of the simulated payload and which names redaction can know.
+
 ## Polish (in order)
 
 1. Tuning loop: simulated manager feedback -> change note -> one rule changed -> evals before/after.
@@ -33,10 +37,12 @@ Decided: leads in a simulated CRM (SQLite), not Bitrix24 (Python stdlib, no serv
 5. Weekly client status.
 6. Pilot report against a baseline (simulated, labelled).
 7. Risk register; remaining ADRs.
-8. Real Bitrix24 instead of SQLite.
-9. Price lookup tool instead of the price list in the prompt, for prices too many or too fresh for a prompt.
-10. LLM judge for wording and tone, which code cannot check, as extra test cases.
-11. "Notes for product" in the README.
+8. Local name detection in redaction (NER model or a small local LLM, next to the regex), measured on a test case with a name only in free text: closes the known redaction limit without sending data out.
+9. Real Bitrix24 instead of SQLite.
+10. Price lookup tool instead of the price list in the prompt, for prices too many or too fresh for a prompt.
+11. LLM judge for wording and tone, which code cannot check, as extra test cases.
+12. "Notes for product" in the README.
+13. Local open-source chat model as an eval experiment: run the same 10 cases, compare pass rate and cost with Haiku. Not a replacement unless it passes.
 
 ## Grill decisions (2026-10-30)
 
