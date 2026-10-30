@@ -75,7 +75,28 @@ def test_the_second_message_has_no_disclosure_and_the_ai_sees_the_whole_chat():
 
     assert reply.text == "Так, є іпотека."
     sent = [m["content"] for m in client.requests[1]["messages"] if m["role"] == "user"]
-    assert sent == ["Скільки коштує двокімнатна в North?", "А іпотека є?"]
+    assert sent[0].endswith("Скільки коштує двокімнатна в North?")
+    assert sent[1] == "А іпотека є?"
+
+
+def test_the_ai_hears_once_that_the_system_already_sent_the_disclosure():
+    bot, _, client = make_agent(text("89 900 USD."), text("Так, є іпотека."))
+    bot.reply(BUYER, "Скільки коштує двокімнатна в North?")
+    bot.reply(BUYER, "А іпотека є?")
+
+    note = agent.DISCLOSURE_NOTE.format(disclosure=agent.DISCLOSURE["uk"])
+    assert client.requests[0]["messages"][0]["content"].startswith(note)
+    assert agent.DISCLOSURE["uk"] not in client.requests[1]["messages"][-1]["content"]
+
+
+def test_after_start_the_note_quotes_the_disclosure_the_buyer_saw_not_the_buyers_language():
+    bot, _, client = make_agent(text("A studio in River is 33,800 USD."))
+    bot.reply(BUYER, "/start")
+
+    bot.reply(BUYER, "How much is a studio?")
+
+    note = agent.DISCLOSURE_NOTE.format(disclosure=agent.DISCLOSURE["uk"])
+    assert client.requests[0]["messages"][0]["content"].startswith(note)
 
 
 @pytest.mark.parametrize(

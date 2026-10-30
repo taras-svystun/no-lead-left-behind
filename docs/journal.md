@@ -186,3 +186,12 @@ Took about 0:15. Taras rejected the time finding: the learning is worth more tha
 - GIF moved from T5's check to T8: T5 was ✅ with an open check, and a GIF of a raw flow would be redone anyway.
 - T5a added: the model gets the disclosure as a system note on the first turn, so it stops greeting twice (live, 1 of 3 first replies did).
 - Core limit raised from "2-4 hours, 6 at most" to "about 10 hours at most" in BRIEF, PLAN and GLOSSARY: ~6 hours are spent, T6-T8 remain, and Taras values what he learns over the first estimate (Taras's call).
+
+## 2026-10-30: T5a no doubled greeting
+
+Took about 0:30 against 0:10: the code review found a wrong note after "/start", and a live run found a crash.
+- The first AI request starts with `DISCLOSURE_NOTE`, which quotes the disclosure; a note in the chat, not a third prompt rule: rule 2 alone left 1 of 3 replies greeting.
+- Live, Haiku: 5 of 5 first replies opened without a greeting (0.003 USD).
+- The note quotes the disclosure the buyer saw, kept per buyer: after "/start" (always Ukrainian) an English first message would otherwise quote the English one.
+- Not fixed: after "/start" the model does not know code asked "what flat are you looking for?", so it may ask again.
+- Not fixed, found live: the model once called `hand_off` with no `reason` ("Привіт, є студії?", old prompt) and `_ask_ai` crashed on `KeyError`; `required` in a tool schema is not enforced without `strict`.

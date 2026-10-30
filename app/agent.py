@@ -93,6 +93,12 @@ START = {"uk": "Підкажіть, яку квартиру шукаєте?", "e
 # What the AI hears when the buyer taps "Share phone": the number itself stays in code.
 PHONE_NOTE = "[Note from the system, not the buyer: the buyer shared their phone with the button. Do not ask for it again.]"
 
+# The model never sees the disclosure that code sends, so without this note it sometimes greets a second time.
+DISCLOSURE_NOTE = (
+    '[Note from the system, not the buyer: the system already sent the buyer this message: "{disclosure}" '
+    "Do not greet or introduce yourself again.]"
+)
+
 
 @dataclass
 class Reply:
@@ -113,6 +119,7 @@ class Agent:
         # Chats live in memory: a restart forgets the chat, the lead stays in the CRM.
         self.chats = {}
         self.languages = {}
+        self.disclosures = {}  # the disclosure each buyer saw, quoted to the AI later
 
     def reply(self, telegram_id, text):
         if not text.startswith("/"):
@@ -131,6 +138,7 @@ class Agent:
         if first_message:
             crm.create_lead(self.db, "telegram", telegram_id)
             lead = crm.find_by_telegram_id(self.db, telegram_id)
+            self.disclosures[telegram_id] = DISCLOSURE[self.language(telegram_id)]
         if phone:
             crm.update_lead(self.db, lead["id"], phone=phone)
 
@@ -143,7 +151,7 @@ class Agent:
         ask_phone = after["phone"] is None and (first_message or handed_off_now)
         phone_saved = lead["phone"] is None and after["phone"] is not None
         if first_message:
-            answer = DISCLOSURE[self.language(telegram_id)] + "\n\n" + answer
+            answer = self.disclosures[telegram_id] + "\n\n" + answer
         return Reply(answer, ask_phone, phone_saved)
 
     def _answer(self, telegram_id, lead, text):
@@ -160,6 +168,11 @@ class Agent:
     def _ask_ai(self, telegram_id, lead_id, text):
         """Run the tool loop; return the text for the buyer."""
         chat = self.chats.setdefault(telegram_id, [])
+        if not chat:
+            # After "/start" the buyer's language can change, but the disclosure they saw does not.
+            # A restart forgets it, so the buyer's language is the best guess.
+            disclosure = self.disclosures.get(telegram_id, DISCLOSURE[self.language(telegram_id)])
+            text = DISCLOSURE_NOTE.format(disclosure=disclosure) + "\n\n" + text
         chat.append({"role": "user", "content": text})
         # The model often asks its next question in the same response as a save_lead call.
         said = []
