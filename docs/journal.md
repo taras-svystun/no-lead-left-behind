@@ -103,3 +103,5 @@ No estimate in the plan; took about 0:15.
 ## 2026-10-30: Review cards and ⏳
 
 Taras missed that T1 awaited his approval: the request was a status line in the plan, and approving meant reading a client document. Now a ticket that needs him gets ⏳ and a review card in chat (up to 5 decisions, one line each); a session blocked by a ⏳ ticket shows the card and stops. Rejected: a summary atop `spec.md`: it would mix the client's document with notes for Taras.
+- P14 added, chat redaction: D6 promised it in polish, but no P item held it.
+- Case 6 check changed from "no total below 89,900" to "every USD total is a price list row": the old check failed a fair answer that offers River's cheaper 2-room flat (found in T2).

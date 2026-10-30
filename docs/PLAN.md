@@ -7,7 +7,7 @@ Show how Taras runs one AI-agent deployment end to end, smallest version that so
 ## Phases
 
 - **Core** (2-4 hours, 6 at most): tickets T1-T8, small but finished; then apply.
-- **Polish**: after applying, items P1-P13 in order, as time allows. A P item becomes a ticket when its turn comes.
+- **Polish**: after applying, items P1-P14 in order, as time allows. A P item becomes a ticket when its turn comes.
 
 IDs are unique across the project: T for tickets, P for polish items, D for decisions. Test cases keep their own numbers ("case 1"), from `delivery/test-cases.md`.
 
@@ -39,6 +39,7 @@ Code lives in `app/`, tests in `tests/`, evals in `evals/`, knowledge files in `
 - **P11.** LLM judge for wording and tone, which code cannot check, as extra test cases.
 - **P12.** "Notes for product" in the README.
 - **P13.** Local open-source chat model as an eval experiment: run the same 10 cases, compare pass rate and cost with Haiku. Not a replacement unless it passes.
+- **P14.** Redact Telegram chats before Claude: phones and emails the buyer types become placeholders, and code saves the real values to the lead. Measured on a case where the buyer types a phone. Promised in D6.
 
 ## Decisions
 
@@ -49,7 +50,7 @@ D1-D14 come from the grill (2026-10-30); D15-D19 were settled before it.
 - **D3.** Every file in English; the bot replies in the buyer's language.
 - **D4.** Client A (all numbers simulated): 2 residential complexes in Kyiv, 6 managers, ~400 inbound conversations a month, ~40% of CRM leads miss budget or rooms, median first reply 2 hours. Price list ~12 rows (flat types per complex, price per m2; payment: 100%, 12-month instalments, partner-bank mortgage). Policies: booking, viewings, what the agent never promises (discounts, completion dates).
 - **D5.** One lead per buyer: the agent asks for a phone number during qualification; the after-call webhook finds the lead by phone, else creates a new lead. Ringostat sends no CRM lead id (help.ringostat.com webhook docs, seen 2026-10-30).
-- **D6.** Redaction covers the call transcript only: code, not Claude: regex for phones and emails, plus the names we already know (the buyer's from the lead found by phone, the manager's from the payload's `employee_fio`; Ringostat sends no caller name). Sending text to Claude to clean it would defeat the purpose. Telegram chats go to Claude as written; the spec says so. Names only in free text slip through: a known limit, written under the test cases; P8 closes it. Redacting chats with placeholders is polish.
+- **D6.** Redaction covers the call transcript only: code, not Claude: regex for phones and emails, plus the names we already know (the buyer's from the lead found by phone, the manager's from the payload's `employee_fio`; Ringostat sends no caller name). Sending text to Claude to clean it would defeat the purpose. Telegram chats go to Claude as written; the spec says so. Names only in free text slip through: a known limit, written under the test cases; P8 closes it. Redacting chats with placeholders is P14.
 - **D7.** The agent says it is an AI in its first message and whenever asked; it never passes itself off as a human.
 - **D8.** Handoff triggers: buyer asks for a person or sends `/manager` (any time, no Claude call); ready to view or book; question outside the price list and policies; complaint. The handoff tool sets lead status `handoff` with a reason; the buyer is told a manager writes within 15 minutes; manager notification is simulated (a log line). After handoff the agent only repeats that a manager is on it.
 - **D9.** The after-call webhook simulates Ringostat's "call processed by AI" event: the after-call event has phone and recording link but no transcript. One Claude call on the redacted transcript writes the summary and the qualification fields, which Ringostat's own free-text summary does not fill.

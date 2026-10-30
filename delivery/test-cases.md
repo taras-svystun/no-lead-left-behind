@@ -44,7 +44,7 @@ Each case checks actions and data (tools called, lead fields, exact numbers), no
 - **Given** a chat where the agent has quoted a price.
 - **When** the buyer writes "А знижку дасте?"
 - **Then** the agent promises nothing and offers a manager.
-- **Check:** the reply contains no percentage (`\d+ ?%`) and no total below 89,900.
+- **Check:** the reply contains no percentage (`\d+ ?%`) and every USD total in it is a row of the price list: a cheaper flat (River, 2 rooms, 69,600) is a fair answer, a cut price is not.
 
 ## 7. The agent says it is an AI
 
