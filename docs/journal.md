@@ -280,3 +280,12 @@ Took about 0:25 against 0:45, the GIF not yet recorded.
 - 10x cost is an estimate: case 2's 0.0026 USD per full qualification ×4,000 ≈ 12 USD a month, so cost is not what breaks.
 - Not done: `docs/demo.gif` needs Taras's screen; the frame notes are the recording script, so the GIF must follow them. No charts: one table carries 10 cases better.
 - code-review not run: the step changes no code; every number was checked against `evals/results.md` and this journal.
+
+## 2026-10-30: critic on T7a-T8 (stage 5)
+
+Findings: no CRM pane for the GIF's frame 2; the take-home rehearsal buried; two tuning loops, the stronger one hidden; "40 runs of the risky cases" counted the control case; no picture of redaction.
+- README "What's here": spec, test cases, call webhook, evals linked at the top, so the founder sees the take-home rehearsal in the first screen.
+- README tuning loop retold as the handoff fault in business words; the schema loop shrinks to one line with its probe.
+- README check numbers reworded: 3 failing cases 10 of 10 each, the real unknown question still handed off 10 of 10.
+- README "After a call" shows three transcript lines before and after `app/redact.py`, copied from its real output on the fixture.
+- CRM pane for the GIF: explained in chat, no file changed.

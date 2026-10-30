@@ -3,6 +3,14 @@
 One AI-agent deployment, run end to end for a fictional client: a Kyiv residential developer whose buyers wait hours for an answer and whose CRM stays half empty.
 The client, its prices and its buyers are simulated; the Claude API calls, the code and the eval numbers are real.
 
+## What's here
+
+The first written work of an AI deployment, done for Client A:
+- [One-page spec](delivery/spec.md): discovery findings, scope, lead fields, when a manager steps in.
+- [10 test cases](delivery/test-cases.md): the contract for "good"; the eval runner runs the same 10.
+- [Call webhook](app/calls.py), checked on a [sample payload](tests/fixtures/call-processed.json), with personal data removed by [`app/redact.py`](app/redact.py) before any AI sees it.
+- [Eval results](evals/results.md): pass rate over 30 runs per case, and cost per conversation.
+
 ## The problem
 
 Client A sells flats in two complexes. About 400 buyer conversations a month: 60% in Telegram, 40% by phone.
@@ -31,6 +39,16 @@ flowchart LR
 - **Handoff.** A viewing, a booking, a complaint, a question the price list does not answer, or a request for a person: the lead gets status `handoff` and the reason, and the buyer is told when a manager will write (15 minutes by day, by 12:00 at night).
 - **After a call.** The telephony webhook (modelled on Ringostat's "call processed by AI" event) brings the caller's phone and transcript. Code finds the lead by phone, removes names, phones and emails, and only then one Claude call writes the summary and fills the lead.
 
+What Claude receives from the [sample call](tests/fixtures/call-1001.vtt), output of `app/redact.py`:
+
+| Transcript | Sent to Claude |
+|---|---|
+| Так, Олено, бачу. | Так, [NAME], бачу. |
+| Ваш номер +380000000001, правильно? Можна ще 000 000 00 01 як резервний? | Ваш номер [PHONE], правильно? Можна ще [PHONE] як резервний? |
+| Надішліть прайс на olena@example.com | Надішліть прайс на [EMAIL] |
+
+The buyer's name is caught in its Ukrainian forms ("Олена", "Олено"), and a phone in any of its formats.
+
 ## Demo
 
 ![A whole chat: price, qualification, phone, handoff](docs/demo.gif)
@@ -53,21 +71,24 @@ flowchart LR
 
 [`evals/run.py`](evals/run.py) runs the 10 test cases against the real API. Code judges actions and data (which tools were called, what is on the lead, the exact price), not wording, which changes from run to run.
 
+One run can pass by luck, so Haiku ran each case 30 times: 293 of 300 passed, 0.24 USD in total.
+One run per model then compared cost:
+
 | Model | Passed (one run) | Cost per conversation |
 |---|---|---|
 | Claude Haiku 5.5 | 10/10 | 0.0008 USD |
 | Claude Sonnet 5.5 | 10/10 | 0.0142 USD |
 
-Same pass rate at 1/17 of the cost, so the agent runs on Haiku.
-One run is a sample, so Haiku then ran each case 30 times: 293 of 300 passed, 0.24 USD in total.
-All 7 failures were one fault, read from the saved chats: the agent handed a price question to a manager as "unknown". One sentence in the prompt fixed it: 0 failures in the next 40 runs of the risky cases; likely better, not yet proven. Full tables: [`evals/results.md`](evals/results.md).
+Same pass rate at 1/17 of the cost, so the agent runs on Haiku. Full tables: [`evals/results.md`](evals/results.md).
 
 ## One tuning loop
 
-1. **Failure.** The first Haiku run failed case 2: the lead lost `rooms`.
-2. **Cause, measured.** [`evals/strict_probe.py`](evals/strict_probe.py) replays case 2's first message 10 times per tool schema. With strict tools and optional fields, Haiku invented a payment method or timing the buyer never gave in 8-9 runs of 10.
-3. **Fix.** Every lead field is required but may be null, and code drops the nulls: 0 wrong in 10.
-4. **Proof.** Case 2 then passed 29 of 30, and the one failure was the other fault above, not this one.
+1. **Failure.** In the 30 runs, 7 chats failed, spread over 4 cases.
+2. **Cause, read from the saved chats.** All 7 were one fault: the buyer asked about a flat the price list covers, and the agent passed the chat to a manager as a question it cannot answer. One buyer asked "how much is a two-room flat in North?" and got "I am passing you to a manager, who will write to you here by 12:00": the slow answer the agent exists to remove.
+3. **Fix.** One sentence in the prompt: questions about flats, prices, areas and rooms are answered from the price list, not passed to a manager.
+4. **Check.** The 3 cases that failed most passed 10 of 10 each. A question the price list really cannot answer ("when will the building be finished?") still went to a manager 10 of 10, so the fix did not stop the handoffs that must happen. A fault that hit about 1 chat in 20 can still miss 30 runs by luck about 1 time in 5: likely fixed, not yet proven.
+
+An earlier loop had its own probe: with optional tool fields, the agent saved a payment method the buyer never named in 8 of 10 runs; required fields that may be empty brought it to 0 of 10 ([`evals/strict_probe.py`](evals/strict_probe.py)).
 
 ## What breaks at 10x (4,000 conversations a month)
 
