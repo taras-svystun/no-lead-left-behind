@@ -57,3 +57,4 @@ Estimate 1:20 for spec and test cases; took about 0:30 of writing after the gril
 - Phone numbers in examples use +380000000001: no real number in a public repo.
 - Case 7 checks wording by pattern (AI|ШІ|штучн|бот): the disclosure matters enough to break the "actions, not wording" rule once.
 - Tickets 1-8 in `docs/PLAN.md`, total ~4:45; ticket 6 waits on the Ringostat name check.
+- Ringostat call webhooks (after call, processed by AI) carry no caller name, only phone and employee name; client names come only in messenger events (help.ringostat.com parameter sheets EN/UK/RU, 2026-10-30; `docs/research/ringostat-webhook-name-fields.md`). So the simulated payload has no caller name and redaction takes names from the lead found by phone. No estimate in the plan; took about 5 minutes.
