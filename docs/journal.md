@@ -29,3 +29,4 @@ No estimate in the plan. Findings and Taras's calls:
 - Applied: price list in the system prompt, not a price tool (-0:15; core ~4:30); price lookup tool is polish 9.
 - Applied: test cases check actions and data, not wording; the LLM judge for wording stays as polish 10.
 - Taras's edit: critic prompt no longer weighs the time budget or says that zero findings is fine.
+- Critic prompt: "nothing game-changing" allowed again; Risk line cut (budget no longer weighed); Bloat merged into Simplify.
