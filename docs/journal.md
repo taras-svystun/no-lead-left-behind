@@ -74,3 +74,12 @@ No estimate in the plan for the critic; took about 0:15. Applied, all accepted b
 - Code tickets start with `/mattpocock-skills:implement`: it drives `tdd`, which confirms what it tests with Taras first, and forbids redesign mid-build; ticket 2 has no code, so plain text.
 - Build critic runs after tickets 4, 7 and 8, not every 2-3: those change the project's shape.
 - The build critic also reads the journal since its last run: drift hides in small decisions, and they are written there.
+
+## 2026-10-30: Knowledge files (ticket 2)
+
+Estimate 0:15; took about 0:10.
+
+- Two complexes, North and River, 4 flat types each, plus 3 payment methods: 11 rows. One 2-room row per complex, so "двокімнатна в North" has one answer.
+- No year, quarter or percentage anywhere: cases 5 and 6 fail on them, and the agent repeats what its prompt holds. So instalments are "12 equal payments" and the mortgage terms are the bank's.
+- Same total for every payment method: a cheaper price for full payment would be a discount the agent could quote.
+- For ticket 7: case 6's "no total below 89,900" also fails a fair answer that offers a cheaper flat (River, 2 rooms, 69,600). Check only the North 2-room price, or accept totals that are other rows of the list.
